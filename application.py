@@ -133,3 +133,6 @@ def callback():
 		session.modified = True
 
 	return redirect("../")
+
+if __name__ == '__main__':
+	app.run()
