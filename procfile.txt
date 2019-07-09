@@ -1,2 +1,1 @@
-heroku run -a gunicorn
-web gunicorn application:app
+web: gunicorn application:app
