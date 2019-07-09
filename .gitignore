@@ -22,6 +22,7 @@ __pycache__/
 .Python
 venv/
 build/
+.vscode/
 develop-eggs/
 dist/
 downloads/
