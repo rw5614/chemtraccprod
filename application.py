@@ -1,6 +1,6 @@
 from flask import Flask, render_template, g, redirect, url_for, abort, session, request
 # from flask_login import LoginManager, current_user, login_required
-from .AmazonCognito import AmazonCognito
+from AmazonCognito.AmazonCognito import AmazonCognito
 from functools import wraps
 import time
 
