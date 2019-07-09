@@ -40,6 +40,8 @@ def not_authorized(e):
 
 @app.before_request
 def refresh_session():
+	print("base_url is ")
+	print(request.base_url)
 	# Checks if the session cookie has a jwt, and if it's valid.
 	# Then, proceeds to refresh it if it is. If not valid, then clear the session cookie again, for safe measure.
 	if 'jwt' in session.keys() and session['jwt'] is not None \
