@@ -1,14 +1,273 @@
-{% extends "layout.html" %}
+{% extends "loggedinlayout.html" %}
 
 {% block title %}Manage Inventory{% endblock %}
 
 {% block body %}
-  <h1 class="text-center text-dark">Search</h1>
+
+<div class="container-fluid">
+  <!-- Here we can put success or failure messages. -->
+  <!-- {% if successful %} -->
+  <!-- <div class="alert alert-success alert-dismissible">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong>Success!</strong> Your chemical was successfully stored.
+  </div> -->
+  <!-- {% elif not successful %} -->
+  <!-- <div class="alert alert-danger alert-dismissible">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong>Failure!</strong> Your chemical was not stored. Please try again in a few minutes.
+  </div>   -->
+  <!-- {% else %} -->
+  <!-- {% endif %} -->
+
+  <!-- Create a row to put the barcode scanner in. -->
   <div class="row">
-    <div class="col-sm-8 offset-sm-2 text-dark text-body">
-      <p>Add or Remove an Item from the Inventory</p>
-      <p>You are authenticated as {{g.user.email}}</p>
-      <p>You are from company [will look up company in DB by email]</p>
+
+    <!-- Barcode scanner resides in this card -->
+    <div class="col-xl-12 col-md-6 mb-4">
+      <div class="card border-left-primary shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <form action="/add" method="GET">
+
+              <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                <h5>Scan the barcode on the RFID tag</h5>
+              </div>
+
+              <div class="input-group">
+                <input id="scanner_input" class="form-control" placeholder="Click the button to scan an EAN..."
+                  type="text" name="scanner_input" />
+                <span class="input-group-btn">
+                  <button class="btn btn-default" type="button" data-toggle="modal" data-target="#livestream_scanner">
+                    <i class="fa fa-barcode"></i>
+                  </button>
+                </span>
+              </div><!-- /input-group -->
+
+              <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                <h5></br>Fill in some info for searching:</h5>
+              </div>
+
+              <div class="form-group">
+                <label for="name">Item Name</label>
+                <input type="text" class="form-control" id="name" placeholder="Enter Item Name" name="name">
+                <small id="emailHelp" class="form-text text-muted">Some helper text</small>
+              </div>
+
+              <div class="form-group">
+                <label for="description">Description</label>
+                <input type="text" class="form-control" id="description" placeholder="Enter Description"
+                  name="description">
+                <small id="emailHelp" class="form-text text-muted">Basically, input anything that you'd like to come up
+                  during a search.</small>
+              </div>
+
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+          </div>
+        </div>
+      </div>
     </div>
+
   </div>
+</div>
+
+<!-- Modal -->
+<div class="modal" id="livestream_scanner">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">Barcode Scanner</h4>
+      </div> -->
+      <div class="modal-body" style="position: static">
+        <div id="interactive" class="viewport"></div>
+        <div class="error"></div>
+      </div>
+      <div class="modal-footer">
+        <!-- <label class="btn btn-default pull-left">
+          <i class="fa fa-camera"></i> Use camera app
+          <input type="file" accept="image/*;capture=camera" capture="camera" class="hidden" />
+        </label> -->
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+{% endblock %}
+
+
+
+
+
+{% block scripts %}
+<!-- <script type="text/javascript" src="https://a.kabachnik.info/assets/js/libs/quagga.min.js"></script> -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
+<style>
+  #interactive.viewport {
+    position: relative;
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+    text-align: center;
+  }
+
+  #interactive.viewport>canvas,
+  #interactive.viewport>video {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  canvas.drawing,
+  canvas.drawingBuffer {
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+</style>
+<script type="text/javascript">
+  $(function () {
+    var recorded_tags = {}
+    var max_read_tag = null
+    var max_read_occur = 0
+
+    // Create the QuaggaJS config object for the live stream
+    var liveStreamConfig = {
+      inputStream: {
+        type: "LiveStream",
+        constraints: {
+          width: { min: 640 },
+          height: { min: 480 },
+          aspectRatio: { min: 1, max: 100 },
+          facingMode: "environment" // or "user" for the front camera
+        }
+      },
+      locator: {
+        patchSize: "medium",
+        halfSample: true
+      },
+      numOfWorkers: (navigator.hardwareConcurrency ? navigator.hardwareConcurrency : 4),
+      decoder: {
+        "readers": [
+          { "format": "ean_reader", "config": {} }
+        ]
+      },
+      locate: true
+    };
+    // The fallback to the file API requires a different inputStream option. 
+    // The rest is the same 
+    var fileConfig = $.extend(
+      {},
+      liveStreamConfig,
+      {
+        inputStream: {
+          size: 800
+        }
+      }
+    );
+    // Start the live stream scanner when the modal opens
+    $('#livestream_scanner').on('shown.bs.modal', function (e) {
+      Quagga.init(
+        liveStreamConfig,
+        function (err) {
+          if (err) {
+            $('#livestream_scanner .modal-body .error').html('<div class="alert alert-danger"><strong><i class="fa fa-exclamation-triangle"></i> ' + err.name + '</strong>: ' + err.message + '</div>');
+
+            // Reset everything and stop Quagga
+            recorded_tags = {}
+            max_read_tag = null
+            max_read_occur = 0
+
+            Quagga.stop();
+            return;
+          }
+          Quagga.start();
+        }
+      );
+    });
+
+    // Make sure, QuaggaJS draws frames an lines around possible 
+    // barcodes on the live stream
+    Quagga.onProcessed(function (result) {
+      var drawingCtx = Quagga.canvas.ctx.overlay,
+        drawingCanvas = Quagga.canvas.dom.overlay;
+
+      if (result) {
+        if (result.boxes) {
+          drawingCtx.clearRect(0, 0, parseInt(drawingCanvas.getAttribute("width")), parseInt(drawingCanvas.getAttribute("height")));
+          result.boxes.filter(function (box) {
+            return box !== result.box;
+          }).forEach(function (box) {
+            Quagga.ImageDebug.drawPath(box, { x: 0, y: 1 }, drawingCtx, { color: "green", lineWidth: 2 });
+          });
+        }
+
+        if (result.box) {
+          Quagga.ImageDebug.drawPath(result.box, { x: 0, y: 1 }, drawingCtx, { color: "#00F", lineWidth: 2 });
+        }
+
+        if (result.codeResult && result.codeResult.code) {
+          Quagga.ImageDebug.drawPath(result.line, { x: 'x', y: 'y' }, drawingCtx, { color: 'red', lineWidth: 3 });
+        }
+      }
+    });
+
+    // Once a barcode had been read successfully, stop quagga and 
+    // close the modal after a second to let the user notice where 
+    // the barcode had actually been found.
+    Quagga.onDetected(function (result) {
+      if (result.codeResult.code) {
+        // If we read a value over 30 times, then we store that as the correct value.
+        // Increment the value when we read it.
+        recorded_tags[result.codeResult.code] = (recorded_tags[result.codeResult.code] + 1) || 1;
+
+        // Check to see if it's the new most common one
+        if (recorded_tags[result.codeResult.code] > max_read_occur) {
+          max_read_tag = result.codeResult.code
+          max_read_occur = recorded_tags[result.codeResult.code]
+        }
+
+        console.log(recorded_tags)
+
+        if (max_read_occur > 30) {
+          console.log('recorded')
+          console.log(recorded_tags)
+          // Record the max_read_tag into the input field.
+          $('#scanner_input').val(max_read_tag);
+
+          // Reset everything
+          recorded_tags = {}
+          max_read_tag = null
+          max_read_occur = 0
+
+          // Stop Quagga, close the modal
+          Quagga.stop();
+          setTimeout(function () { $('#livestream_scanner').modal('hide'); }, 1000);
+        }
+      }
+    });
+
+    // Stop quagga in any case, when the modal is closed
+    $('#livestream_scanner').on('hide.bs.modal', function () {
+      if (Quagga) {
+        // Reset everything
+        recorded_tags = {}
+        max_read_tag = null
+        max_read_occur = 0
+
+        Quagga.stop();
+      }
+    });
+
+    // Call Quagga.decodeSingle() for every file selected in the 
+    // file input
+    // $("#livestream_scanner input:file").on("change", function(e) {
+    // 	if (e.target.files && e.target.files.length) {
+    // 		Quagga.decodeSingle($.extend({}, fileConfig, {src: URL.createObjectURL(e.target.files[0])}), function(result) {alert(result.codeResult.code);});
+    // 	}
+    // });
+  });
+</script>
 {% endblock %}

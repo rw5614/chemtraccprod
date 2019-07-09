@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+
+{% block title %}Manage Inventory{% endblock %}
+
+{% block body %}
+  <h1 class="text-center text-dark">Search</h1>
+  <div class="row">
+    <div class="col-sm-8 offset-sm-2 text-dark text-body">
+      <p>Add or Remove an Item from the Inventory</p>
+      <p>You are authenticated as {{g.user.email}}</p>
+      <p>You are from company [will look up company in DB by email]</p>
+    </div>
+  </div>
+{% endblock %}
