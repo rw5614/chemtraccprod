@@ -20,54 +20,47 @@
   <!-- {% endif %} -->
 
   <!-- Create a row to put the barcode scanner in. -->
-  <div class="row">
+  <!-- <div class="row"> -->
 
-    <!-- Barcode scanner resides in this card -->
-    <div class="col-xl-12 col-md-6 mb-4">
-      <div class="card border-left-primary shadow h-100 py-2">
-        <div class="card-body">
-          <div class="row no-gutters align-items-center">
-            <form action="/add" method="GET">
+  <!-- Barcode scanner resides in this card -->
+  <div class="card shadow mb-4 p-4">
 
-              <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                <h5>Scan the barcode on the RFID tag</h5>
-              </div>
+    <form>
 
-              <div class="input-group">
-                <input id="scanner_input" class="form-control" placeholder="Click the button to scan an EAN..."
-                  type="text" name="scanner_input" />
-                <span class="input-group-btn">
-                  <button class="btn btn-default" type="button" data-toggle="modal" data-target="#livestream_scanner">
-                    <i class="fa fa-barcode"></i>
-                  </button>
-                </span>
-              </div><!-- /input-group -->
-
-              <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                <h5></br>Fill in some info for searching:</h5>
-              </div>
-
-              <div class="form-group">
-                <label for="name">Item Name</label>
-                <input type="text" class="form-control" id="name" placeholder="Enter Item Name" name="name">
-                <small id="emailHelp" class="form-text text-muted">Some helper text</small>
-              </div>
-
-              <div class="form-group">
-                <label for="description">Description</label>
-                <input type="text" class="form-control" id="description" placeholder="Enter Description"
-                  name="description">
-                <small id="emailHelp" class="form-text text-muted">Basically, input anything that you'd like to come up
-                  during a search.</small>
-              </div>
-
-              <button type="submit" class="btn btn-primary">Submit</button>
-            </form>
-          </div>
-        </div>
+      <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+        <h5>Scan the barcode on the RFID tag</h5>
       </div>
-    </div>
 
+      <div class="input-group">
+        <input id="scanner_input" class="form-control" placeholder="Click the button to scan an EAN..." type="text"
+          name="scanner_input" />
+        <span class="input-group-btn">
+          <button class="btn btn-default" type="button" data-toggle="modal" data-target="#livestream_scanner">
+            <i class="fa fa-barcode"></i>
+          </button>
+        </span>
+      </div><!-- /input-group -->
+
+      <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+        <h5></br>Fill in some info for searching:</h5>
+      </div>
+
+      <div class="form-group">
+        <label for="name">Item Name</label>
+        <input type="text" class="form-control" id="name" placeholder="Enter Item Name" name="name">
+        <small id="emailHelp" class="form-text text-muted">Some helper text</small>
+      </div>
+
+      <div class="form-group">
+        <label for="description">Description</label>
+        <input type="text" class="form-control" id="description" placeholder="Enter Description" name="description">
+        <small id="emailHelp" class="form-text text-muted">Basically, input anything that you'd like to come up
+          during a search.</small>
+      </div>
+
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    
   </div>
 </div>
 
