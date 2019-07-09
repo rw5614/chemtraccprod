@@ -9,7 +9,7 @@ app = Flask(__name__, static_url_path='/static')
 # login_manager.init_app(app)
 auth_base_url = "https://labtracc.auth.us-east-1.amazoncognito.com"
 # TODO: change to herokuapp and whitelist
-current_website_addr = 'https://labtracc.herokuapp.com/'  # http://localhost:5000
+current_website_addr = 'https://labtracc.herokuapp.com'  # http://localhost:5000
 amazonCognito = AmazonCognito("7m1prek8gppfutbgs11kukg8tg",
                               "176k6jem77d561vgmcp8gnkadapm5vcoi1vt4c4ukdfnre2soioi",
                               "https://labtracc.auth.us-east-1.amazoncognito.com",
