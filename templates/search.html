@@ -11,7 +11,16 @@
     <!-- <h1 class="h3 mb-2 text-gray-800">Tables</h1> -->
 
     <div class="card shadow mb-4">
-        <input class="form-control md-11" type="text" placeholder="Search" aria-label="Search">
+        <form>
+            <div class="input-group">
+                <input id="search_query" class="form-control" placeholder="Search" type="text" name="q" />
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="submit">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </span>
+            </div>
+        </form>
     </div>
 
     <!-- DataTales Example -->
@@ -66,5 +75,12 @@
 <!-- Page level custom scripts -->
 <script src="static/js/demo/datatables-demo.js"></script>
 <!-- Include a script that listens for the person pressing enter. -->
+
+<script>
+    function myFunction() {
+        alert("Hello! I am an alert box!");
+    }
+</script>
+
 
 {% endblock %}
