@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>LabTracc | {% block title %}{% endblock %}</title>
+    <link rel="apple-touch-icon" sizes="57x57" href="/static/apple-icon-57x57.png">
+	<link rel="apple-touch-icon" sizes="60x60" href="/static/apple-icon-60x60.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="/static/apple-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="76x76" href="/static/apple-icon-76x76.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="/static/apple-icon-114x114.png">
+	<link rel="apple-touch-icon" sizes="120x120" href="/static/apple-icon-120x120.png">
+	<link rel="apple-touch-icon" sizes="144x144" href="/static/apple-icon-144x144.png">
+	<link rel="apple-touch-icon" sizes="152x152" href="/static/apple-icon-152x152.png">
+	<link rel="apple-touch-icon" sizes="180x180" href="/static/apple-icon-180x180.png">
+	<link rel="icon" type="image/png" sizes="192x192"  href="/static/android-icon-192x192.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="/static/favicon-96x96.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/static/favicon-16x16.png">
+	<link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon">
+	<link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+	<link rel="manifest" href="/static/manifest.json">
+	<meta name="msapplication-TileColor" content="#ffffff">
+	<meta name="msapplication-TileImage" content="/static/ms-icon-144x144.png">
+	<meta name="theme-color" content="#ffffff">
+</head>
+
+<body class="text-light">
+<nav class="navbar navbar-expand-md navbar-dark bg-dark" style="">
+    <div class="container"><a class="navbar-brand" href="/">
+        <i class="fa d-inline fa-lg fa-stop-circle"></i>
+        <img src="/static/LabTraccLogo-44px.png" width="24%"> LabTracc
+    </a>
+        <button class="navbar-toggler navbar-toggler-right border-0" type="button" data-toggle="collapse"
+                data-target="#navbar10" style="">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbar10">
+            {% if not session.jwt %}
+            <ul class="navbar-nav ml-auto">
+            </ul>
+            <a href="/login" class="btn navbar-btn ml-md-2 btn-light text-dark">Login</a>
+            {% else %}
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a class="nav-link" href="/dashboard">Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link" href="/search">Search</a></li>
+                <li class="nav-item"><a class="nav-link" href="/add">Add</a></li>
+            </ul>
+            <a href="/logout" class="btn navbar-btn ml-md-2 btn-light text-dark">Logout</a>
+            {% endif %}
+        </div>
+    </div>
+</nav>
+{% block body %}{% endblock %}
+<div class="pt-5 bg-dark" style="">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-9">
+                <p class="lead text-light">Sign up for a demo today</p>
+                <form class="form-inline">
+                    <div class="form-group"><input type="email" class="form-control my-1 mr-1"
+                                                   placeholder="Your E-mail"></div>
+                    <button type="submit" class="btn my-1 btn-outline-primary">Schedule Demo</button>
+                </form>
+            </div>
+            <!-- <div class="col-4 col-md-1 align-self-center my-3"><a href="https://www.facebook.com" target="blank"><i
+                    class="fa fa-fw fa-facebook fa-3x text-white"></i></a></div>
+            <div class="col-4 col-md-1 align-self-center my-3"><a href="https://twitter.com" target="blank"><i
+                    class="fa fa-fw fa-twitter fa-3x text-white"></i></a></div>
+            <div class="col-4 col-md-1 align-self-center my-3"><a href="https://www.instagram.com" target="blank"><i
+                    class="fa fa-fw fa-instagram fa-3x text-white"></i></a></div> -->
+        </div>
+        <div class="row">
+            <div class="col-md-11 my-3 text-center" style="">
+                <p class="text-muted">© Copyright 2019 LabTracc - All rights reserved.</p>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>

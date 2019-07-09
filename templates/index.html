@@ -1,0 +1,21 @@
+{% if session.jwt %}
+    {% extends "loggedinlayout.html" %}
+{% else %}
+    {% extends "loggedoutlayout.html" %}
+{% endif %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block body %}
+<div class="card bg-dark text-white">
+    <img class="card-img" src="https://i.redd.it/p3i2jhwi9v831.png" alt="Card image">
+    <div class="card-img-overlay">
+        <h1 class="display-1 card-title">track your lab stock</h1>
+        <p class="card-text">Effortlessly track the stock and equipment in your lab with our automatic wireless system.</p>
+        <!-- <p class="card-text">Last updated 3 mins ago</p> -->
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
