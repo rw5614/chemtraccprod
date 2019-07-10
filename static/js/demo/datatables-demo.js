@@ -1,9 +1,15 @@
 // Call the dataTables jQuery plugin
 $(document).ready(function () {
-  $('#dataTable').DataTable({
+  var table = $('#dataTable').DataTable({
     // "searching": false
   });
+
+  $('#dataTable tbody').on('click', 'tr', function() {
+    var data = table.row( this ).data();
+    alert(data);
+  });
 });
+
 
 // function loadDataTable(numItems) {
 //   $(document).ready(function() {

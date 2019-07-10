@@ -185,6 +185,14 @@
   <!-- Custom scripts for all pages-->
   <script src="static/js/sb-admin-2.min.js"></script>
 
+  <!-- <script>
+    // Automatically redirect from http to https
+    var loc = window.location.href + '';
+    if (loc.indexOf('http://') == 0) {
+      window.location.href = loc.replace('http://', 'https://');
+    }
+  </script> -->
+
   {% block scripts %}{% endblock %}
 
 </body>
