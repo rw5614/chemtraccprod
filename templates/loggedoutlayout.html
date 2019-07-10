@@ -193,7 +193,26 @@
     }
   </script> -->
 
-  {% block scripts %}{% endblock %}
+  
+    
+  <script src="https://form.jotform.me/static/feedback2.js" type="text/javascript">
+    new JotformFeedback({
+      formId: "91901568661463",
+      buttonText: "Schedule a Demo",
+      base: "https://form.jotform.me/",
+      background: "#F59202",
+      fontColor: "#FFFFFF",
+      buttonSide: "right",
+      buttonAlign: "center",
+      type: false,
+      width: 700,
+      height: 500,
+      isCardForm: false
+    });
+  </script>
+
+  {% block scripts %}
+  {% endblock %}
 
 </body>
 
