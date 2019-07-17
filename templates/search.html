@@ -5,66 +5,60 @@
 {% block body %}
 
 
-<div class="container-fluid">
+    <div class="container-fluid">
 
-    <!-- Page Heading -->
-    <!-- <h1 class="h3 mb-2 text-gray-800">Tables</h1> -->
+        <!-- Page Heading -->
+        <!-- <h1 class="h3 mb-2 text-gray-800">Tables</h1> -->
 
-    <div class="card shadow mb-4">
-        <input class="form-control md-11" type="text" placeholder="Search" aria-label="Search">
-    </div>
-
-    <!-- DataTales Example -->
-    <!-- Include code so that if there was a query made, the table shows. Otherwise, instructions show to explain ES query lang. -->
-    <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
+        <div class="card shadow mb-4">
+            <input class="form-control md-11" type="text" placeholder="Search" aria-label="Search">
         </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Location</th>
-                            <th>Description</th>
-                            <th>Timestamp</th>
-                        </tr>
-                    </thead>
-                    <tfoot>
-                        <tr>
-                            <th>Name</th>
-                            <th>Location</th>
-                            <th>Description</th>
-                            <th>Timestamp</th>
-                        </tr>
-                    </tfoot>
 
-                    <!-- Body should go here -->
-                    {% for item in items %}
-                    <tr>
-                        <td>{{ item.name }}</td>
-                        <td>{{ item.location }}</td>
-                        <td>{{ item.description }}</td>
-                        <td>{{ item.timestamp }}</td>
-                    </tr>
-                    {% endfor %}
-
-                </table>
+        <!-- DataTales Example -->
+        <!-- Include code so that if there was a query made, the table shows. Otherwise, instructions show to explain ES query lang. -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                        <tr>
+                            <th>RFID_number</th>
+                            <th>customer_id</th>
+                            <th>foo</th>
+                            <th>RFID_number</th>
+                            <th>loc</th>
+                            <th>name</th>
+                            <th>timestamp</th>
+                        </thead>
+                        <tfoot>
+                        <tr>
+                            <th>RFID_number</th>
+                            <th>customer_id</th>
+                            <th>foo</th>
+                            <th>reen_eggs</th>
+                            <th>loc</th>
+                            <th>name</th>
+                            <th>timestamp</th>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
             </div>
         </div>
-    </div>
 
-</div>
+    </div>
 {% endblock %}
 
 {% block scripts %}
-<!-- Page level plugins -->
-<script src="static/vendor/datatables/jquery.dataTables.min.js"></script>
-<script src="static/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+    <!-- Page level plugins -->
+    <script src="static/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="static/vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
-<!-- Page level custom scripts -->
-<script src="static/js/demo/datatables-demo.js"></script>
-<!-- Include a script that listens for the person pressing enter. -->
+    <!-- Page level custom scripts -->
+    <script src="static/js/demo/datatables-demo.js"></script>
+    <!-- Include a script that listens for the person pressing enter. -->
 
 {% endblock %}

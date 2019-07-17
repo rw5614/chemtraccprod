@@ -1,6 +1,7 @@
-from flask import Flask, render_template, g, redirect, url_for, abort, session, request
+from flask import Flask, render_template, g, redirect, url_for, abort, session, request, jsonify
 # from flask_login import LoginManager, current_user, login_required
-from .AmazonCognito import AmazonCognito
+from AmazonCognito.AmazonCognito import AmazonCognito
+from SearchES.search_es import search_es, possible_data_fields
 from functools import wraps
 import time
 
@@ -65,7 +66,9 @@ def refresh_session():
 	else:
 		# Just in case there is a stale session cookie out there, we don't keep running amazonCognito.check_logged_in
 		session.clear()
-	# session.modified = True
+
+
+# session.modified = True
 
 
 @app.route("/")
@@ -81,6 +84,7 @@ def dashboard():
 	# print(amazonCognito.get_user_info(session['jwt']['access_token']))
 	return render_template("dashboard.html")
 
+
 @app.route("/search")
 @login_required
 def search():
@@ -89,8 +93,9 @@ def search():
 	# print(amazonCognito.get_user_info(session['jwt']['access_token']))
 
 	# TODO:I just hardcoded some items here. So this is obv not good.
-	items = [{'name':'steve', 'location':'here', 'description':'a dude', 'timestamp':12353224}]
+	items = [{'name': 'steve', 'location': 'here', 'description': 'a dude', 'timestamp': 12353224}]
 	return render_template("search.html", items=items)
+
 
 @app.route("/add")
 @login_required
@@ -133,3 +138,10 @@ def callback():
 		session.modified = True
 
 	return redirect("../")
+
+
+@app.route("/test_data", methods=["POST", "GET"])
+def search_es_endpoint():
+	results = search_es("axe", "1")
+	results = {"data":results}
+	return jsonify(results)

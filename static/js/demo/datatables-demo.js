@@ -1,8 +1,20 @@
 // Call the dataTables jQuery plugin
 $(document).ready(function () {
-  $('#dataTable').DataTable({
-    // "searching": false
-  });
+    $('#dataTable').DataTable({
+        "ajax": {
+            "url": "/test_data",
+            "dataSrc": "data"
+        },
+        columns: [
+            {data: "RFID_number"},
+            {data: "customer_id"},
+            {data: "foo"},
+            {data: "reen_eggs"},
+            {data: "loc"},
+            {data: "name"},
+            {data: "timestamp"}
+        ]
+    });
 });
 
 // function loadDataTable(numItems) {
