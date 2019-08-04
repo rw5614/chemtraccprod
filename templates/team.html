@@ -1,0 +1,62 @@
+{% if session.jwt %}
+{% extends "loggedinlayout.html" %}
+{% else %}
+{% extends "loggedoutlayout.html" %}
+{% endif %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <!-- Row Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">The Team</h1>
+    </div>
+
+    <div class="row">
+        <!-- Each Team Member gets a card -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-0 shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <img src="https://www.w3schools.com/html/img_chania.jpg" class="img-thumbnail"
+                            alt="Flowers in Chania">
+                        <h5>Person 1</h5>
+                        <h6>He built the awesome thing.</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-0 shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <img src="http://2.bp.blogspot.com/-0fjcPTgzvlk/Tw2Ur96d8QI/AAAAAAAADvs/ej6PHfPR0wM/s1600/sunflowers-of-the-storm.jpg" class="img-thumbnail"
+                            alt="Flowers in Chania">
+                        <h5>Person 2</h5>
+                        <h6>He built that awesome thing.</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-0 shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <img src="https://static1.squarespace.com/static/5943253215d5db889e79883f/594327963e00be46daf8a72b/5952bec0b11be182d289f94c/1499887087371/CrazySweet_ProductImages_SweedishFish.png?format=1500w" class="img-thumbnail"
+                            alt="Flowers in Chania">
+                        <h5>Person 3</h5>
+                        <h6>He built this awesome thing.</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}

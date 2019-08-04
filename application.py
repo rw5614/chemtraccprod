@@ -1,4 +1,4 @@
-from flask import Flask, render_template, g, redirect, url_for, abort, session, request
+from flask import Flask, render_template, g, redirect, url_for, abort, session, request, jsonify
 # from flask_login import LoginManager, current_user, login_required
 from AmazonCognito.AmazonCognito import AmazonCognito
 from functools import wraps
@@ -9,7 +9,8 @@ app = Flask(__name__, static_url_path='/static')
 # login_manager.init_app(app)
 auth_base_url = "https://labtracc.auth.us-east-1.amazoncognito.com"
 # TODO: change to herokuapp and whitelist
-current_website_addr = 'https://labtracc.herokuapp.com'  # http://localhost:5000
+# current_website_addr = 'https://labtracc.herokuapp.com'  # http://localhost:5000
+current_website_addr = 'http://localhost:5000'  # https://labtracc.herokuapp.com
 amazonCognito = AmazonCognito("7m1prek8gppfutbgs11kukg8tg",
                               "176k6jem77d561vgmcp8gnkadapm5vcoi1vt4c4ukdfnre2soioi",
                               "https://labtracc.auth.us-east-1.amazoncognito.com",
@@ -145,6 +146,17 @@ def callback():
 
     return redirect("../")
 
+@app.route("/team")
+def team():
+    return render_template("team.html")
+
+@app.route("/chartdata")
+def chartdata():
+    return jsonify(something=1, other=2)
+
+@app.route("/question")
+def show_question():
+    return render_template('question.html')
 
 if __name__ == '__main__':
     app.run()
