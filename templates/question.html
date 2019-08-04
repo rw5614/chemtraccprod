@@ -24,7 +24,6 @@
         <h1 class="h3 mb-0 text-gray-800">The Knowledge Exchange</h1>
     </div>
 
-
     <div class="row">
 
         <div class="col-xl-12 col-md-6 mb-2">
@@ -45,36 +44,31 @@
                                 <p>I really want to do this thing. Help me, please! Here are more details.</p>
                             </div>
                         </div>
-                        <!-- Number of comments goes here -->
-                        <div class="col-auto">
-                            <b>1</b> <i class="fas fa-comments fa-2x text-gray-300"></i>
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="col-xl-12 col-md-6 mb-2">
-            <div class="card border-left-primary shadow h-100 py-2">
+        <div class="col-xl-12 col-md-6 mb-1">
+            <div id='app'>
+                <answer answertext="Why are you running?" username="Raymond" userurl="users?id=420"></answer>
+            </div>
+        </div>
+
+        <div class="col-xl-1"></div>
+        <div class="col-xl-11 col-md-6 mb-1">
+            <div class="card rounded-0 h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <!-- Question goes here -->
-                            <div class="mb-1">
-                                <h5><a href="google.com">I keep setting fire to my lab bench! Help!!</a></h5>
+                            <!-- Answer goes here -->
+                            <div class="mb-0">
+                                <p>I really want to do this thing. Help me, please! Here are more details.</p>
                             </div>
                             <!-- Username goes here -->
                             <div class="text-xs mb-1">
                                 <a href="google.com" style="color: #808080">Steve-O</a>
                             </div>
-                            <!-- Details go here -->
-                            <div class="mb-1">
-                                <p>I really want to do this thing. Help me, please! Here are more details.</p>
-                            </div>
-                        </div>
-                        <!-- Number of comments goes here -->
-                        <div class="col-auto">
-                            <b>1</b> <i class="fas fa-comments fa-2x text-gray-300"></i>
                         </div>
                     </div>
                 </div>
@@ -82,6 +76,10 @@
         </div>
 
     </div>
+
+    <!-- <div id="app">
+        <comment></comment>
+    </div> -->
 
     <div class="row">
 
@@ -122,6 +120,6 @@
 <!-- Page level plugins -->
 
 <!-- Page level custom scripts -->
-
+<script src="static/js/demo/vue-apps.js"></script>
 
 {% endblock %}

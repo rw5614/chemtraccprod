@@ -1,4 +1,4 @@
-from flask import Flask, render_template, g, redirect, url_for, abort, session, request
+from flask import Flask, render_template, g, redirect, url_for, abort, session, request, jsonify
 # from flask_login import LoginManager, current_user, login_required
 from AmazonCognito.AmazonCognito import AmazonCognito
 from functools import wraps
@@ -150,6 +150,13 @@ def callback():
 def team():
     return render_template("team.html")
 
+@app.route("/chartdata")
+def chartdata():
+    return jsonify(something=1, other=2)
+
+@app.route("/question")
+def show_question():
+    return render_template('question.html')
 
 if __name__ == '__main__':
     app.run()
