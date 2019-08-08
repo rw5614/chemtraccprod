@@ -3,6 +3,7 @@ from flask import Flask, render_template, g, redirect, url_for, abort, session, 
 from AmazonCognito.AmazonCognito import AmazonCognito
 from functools import wraps
 import time
+from urllib.parse import quote
 
 app = Flask(__name__, static_url_path='/static')
 # login_manager = LoginManager()
@@ -88,7 +89,38 @@ def dashboard():
     # if 'jwt' in session.keys() and session['jwt'] is not None and amazonCognito.check_logged_in(
     # 		session['jwt']['access_token']):
     # print(amazonCognito.get_user_info(session['jwt']['access_token']))
-    return render_template("dashboard.html")
+
+    import random
+    list_of_questions = [
+        {
+            'questiontext': 'Where is the lamb sauce?',
+            'questionurl': 'question?id=' + random.choice(['1','2','3','4','5','6']),
+            'moreinfo': '''Hello, this is Gordon Ramsey, chef bloody extraordinaire. I hear you are starting a cooking show and I would like to send you my special pasta recipe to get you started...''',
+            'username': 'GordonRamsey',
+            'userurl': 'users?id=' + '69',
+            'numcomments': '6',
+            'timestamp': 'July 4th, 1776',
+            'liked': True,
+            'numberlikes': 12,
+            'tags': ['food', 'chemistry', 'food chemistry']
+        }
+    ]
+
+    for i in range(10):
+        temp = list_of_questions[0].copy()
+        temp['questionurl'] = 'question?id=' + random.choice(['1','2','3','4','5','6'])
+        temp['numlikes'] = random.choice(['1','2','3','4','5','6','7','8','9','10','11','12'])
+        list_of_questions.append(temp)
+
+    print(list_of_questions)
+
+    page_props = {
+        'currentpage': 22,
+        'maxpage': 22,
+        'query': quote('lamb sauce')
+    }
+
+    return render_template("dashboard.html", questions=list_of_questions, paginator=page_props)
 
 
 @app.route("/search")
@@ -157,6 +189,14 @@ def chartdata():
 @app.route("/question")
 def show_question():
     return render_template('question.html')
+
+@app.route("/user")
+def user_page():
+    return render_template('user.html')
+
+@app.route("/testpost", methods = ['POST'])
+def test_post():
+    return '', 200
 
 if __name__ == '__main__':
     app.run()

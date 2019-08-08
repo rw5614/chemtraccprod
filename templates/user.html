@@ -1,0 +1,127 @@
+{% extends "loggedinlayout.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block body %}
+
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <form>
+            <div class="input-group">
+                <input id="search_query" class="form-control" placeholder="Search" type="text" name="q">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="submit">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </span>
+            </div>
+        </form>
+        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                class="fas fa-question fa-sm text-white-50"></i> Ask a Question</a>
+
+        <h1 class="h3 mb-0 text-gray-800">The Knowledge Exchange</h1>
+    </div>
+
+    <div class="row">
+
+        <div class="col-xl-12 col-md-6 mb-2">
+            <div class="card shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <!-- Name goes here -->
+                            <div class="mb-1">
+                                <h1>Gordon Ramsey</h1>
+                            </div>
+
+                            <br>
+
+                            <!-- Skills goes here -->
+                            <div class="mb-1">
+                                <span class="badge badge-light text-lowercase">Cooking</span>
+                                <span class="badge badge-light text-lowercase">Baking</span>
+                                <span class="badge badge-light text-lowercase">Stir-Fry</span>
+                            </div>
+
+                            <!-- About goes here -->
+                            <div class="mb-1">
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+                                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+                                    exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
+                                    irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+                                    pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+                                    deserunt mollit anim id est laborum.</p>
+                            </div>
+
+                            <!-- Number of likes received -->
+                            <div class="mb-1">
+                                <h4><b>52</b> likes received</h4>
+                            </div>
+                            <!-- Number of questions asked -->
+                            <div class="mb-1">
+                                <h4><b>23</b> questions asked</h4>
+                            </div>
+                            <!-- Number of questions answered -->
+                            <div class="mb-1">
+                                <h4><b>37</b> questions answered</h4>
+                            </div>
+                        </div>
+
+                        <div class="col-auto">
+                            <img src="https://www.w3schools.com/html/img_chania.jpg" class="img-thumbnail"
+                                alt="Flowers in Chania"
+                                style="width: 300px; height: 300px; background-position: center center; background-repeat: no-repeat; border-radius: 50%;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-12 col-md-6 mb-1">
+            <div id='app'>
+                <tabs>
+                    <span slot="asked">
+                        <question questiontext="Where is the lamb sauce?" questionurl="question?id=4"
+                            moreinfo="Hello, this is Gordon Ramsey, chef bloody extraordinaire. I hear you are starting a cooking show and I would like to send you my special pasta recipe to get you started..."
+                            username="GordonRamsey" userurl="users?id=69" numbercomments="6" timestamp="July 4th, 1776"
+                            liked="True" numberlikes="12"
+                            v-bind:tags="[&#39;food&#39;, &#39;chemistry&#39;, &#39;food chemistry&#39;]">
+                        </question>
+                        <question questiontext="Where is the lamb sauce?" questionurl="question?id=4"
+                            moreinfo="Hello, this is Gordon Ramsey, chef bloody extraordinaire. I hear you are starting a cooking show and I would like to send you my special pasta recipe to get you started..."
+                            username="GordonRamsey" userurl="users?id=69" numbercomments="6" timestamp="July 4th, 1776"
+                            liked="True" numberlikes="12"
+                            v-bind:tags="[&#39;food&#39;, &#39;chemistry&#39;, &#39;food chemistry&#39;]">
+                        </question>
+                    </span>
+
+                    <span slot="liked">
+                        likeed
+                    </span>
+
+                    <span slot="answered">
+                        answered
+                    </span>
+                </tabs>
+            </div>
+        </div>
+
+    </div>
+
+
+</div>
+
+
+<!-- /.container-fluid -->
+{% endblock %}
+
+
+{% block scripts %}
+<!-- Page level plugins -->
+
+<!-- Page level custom scripts -->
+<script src="static/js/demo/vue-user.js"></script>
+
+{% endblock %}
