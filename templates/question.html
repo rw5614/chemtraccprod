@@ -63,24 +63,8 @@
 
     <div class="row">
         <div class="col-xl-12 col-md-6 mb-1">
-            <div id="app">
-                <div class="card rounded-0 h-100 py-2">
-                    <h5 class="card-header">Add an Answer</h5>
-
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <form action="/action_page.php">
-                                    <div class="form-group" style="overflow: auto;">
-                                        <textarea type="text" id="comment" class="form-control"
-                                            style="margin-top: 0px; margin-bottom: 0px; height: 189px;"></textarea>
-                                    </div>
-                                    <button type="submit" class="btn btn-success">Submit</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div id="addanswer">
+                <addanswer showheader="False" value="someValue"></addanswer>
             </div>
         </div>
     </div>
@@ -97,5 +81,36 @@
 
 <!-- Page level custom scripts -->
 <script src="static/js/demo/vue-question.js"></script>
+<script>
+var IMAGE_MIME_REGEX = /^image\/(p?jpeg|gif|png)$/i;
+
+var loadImage = function (file) {
+    var reader = new FileReader();
+    reader.onload = function(e){
+        var img = document.createElement('img');
+        img.src = e.target.result;
+        
+        var range = window.getSelection().getRangeAt(0);
+        range.deleteContents();
+        range.insertNode(img);
+    };
+    reader.readAsDataURL(file);
+};
+
+document.onpaste = function(e){
+    if (Boolean(window.chrome)){
+        var items = e.clipboardData.items;
+
+        for (var i = 0; i < items.length; i++) {
+            if (IMAGE_MIME_REGEX.test(items[i].type)) {
+                loadImage(items[i].getAsFile());
+                return;
+            }
+        }
+    };
+    
+    // Normal paste handling here
+}
+</script>
 
 {% endblock %}

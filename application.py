@@ -115,7 +115,7 @@ def dashboard():
     print(list_of_questions)
 
     page_props = {
-        'currentpage': 22,
+        'currentpage': 4,
         'maxpage': 22,
         'query': quote('lamb sauce')
     }
@@ -194,7 +194,7 @@ def show_question():
 def user_page():
     return render_template('user.html')
 
-@app.route("/testpost", methods = ['POST'])
+@app.route("/testpost", methods=['POST'])
 def test_post():
     return '', 200
 

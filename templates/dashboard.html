@@ -43,48 +43,8 @@
 
     <div class="row">
 
-        <div class="col-xl-12">
-            <div class="card-transparent mb-4">
-
-                <nav aria-label="Page navigation example">
-                    <ul class="pagination justify-content-center">
-
-                        {# Determine if we display 1 #}
-                        {% if paginator.currentpage >= 4 %}
-                        <li class="page-item"><a class="page-link"
-                                href="{{ 'dashboard?' +  paginator.query + '&pagenum=' + 1|string }}">1</a></li>
-                        {% endif %}
-
-                        {# Determine if we display ... #}
-                        {% if (paginator.currentpage - 2) >= 3 %}
-                        <li class="page-item disabled"><a class="page-link" href="#">...</a></li>
-                        {% endif %}
-
-                        {# Display the first five. #}
-                        {% for i in range(-2,3) %}
-                        {% if (i + paginator.currentpage) > 0 and (i + paginator.currentpage) <= paginator.maxpage %}
-                        <li class="page-item"><a class="page-link"
-                                href="{{ 'dashboard?' + paginator.query + '&pagenum=' + (i + paginator.currentpage)|string }}">{{ (i + paginator.currentpage) }}</a>
-                        </li>
-                        {% endif %}
-                        {% endfor %}
-
-                        {# Determine if we display ... #}
-                        {% if (paginator.currentpage + 2) <= paginator.maxpage - 2 %}
-                        <li class="page-item disabled"><a class="page-link" href="#">...</a></li>
-                        {% endif %}
-
-                        {# Determine if we display last element #}
-                        {% if (paginator.currentpage + 2) < paginator.maxpage %}
-                        <li class="page-item"><a class="page-link"
-                                href="{{ 'dashboard?' + paginator.query + '&pagenum=' + paginator.maxpage|string }}">{{ (paginator.maxpage) }}</a>
-                        </li>
-                        {% endif %}
-
-                    </ul>
-                </nav>
-
-            </div>
+        <div id="pageselectapp" class="col-xl-12">
+            <pageselector currentpage="{{ paginator.currentpage }}" maxpage="{{ paginator.maxpage }}" query="{{ paginator.query }}"></pageselector>
         </div>
     </div>
 

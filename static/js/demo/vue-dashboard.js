@@ -80,6 +80,61 @@ Vue.component('question', {
     }
 })
 
+Vue.component('pageselector', {
+    data: function () {
+        console.log('here!!')
+        var currp = parseInt(this.currentpage, 10);
+        var maxp = parseInt(this.maxpage, 10);
+
+        var middle = [];
+        for (let i = currp - 2; i <= currp + 2; i++) {
+            if (i > 0 && i <= maxp){
+                middle.push(i);
+            };
+        };
+
+        console.log(middle)
+
+        return {
+            currp: currp,
+            maxp: maxp,
+            middle: middle
+        }
+    },
+    props: ['currentpage', 'maxpage', 'query'],
+    template:`
+    <div class="card-transparent mb-4">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+
+                <li class="page-item" v-if="currp > 3">
+                    <a class="page-link" :href="'dashboard?' + query + '&pagenum=' + '1'">1</a>
+                </li>
+
+                <li class="page-item disabled" v-if="(currp - 2) > 2">
+                    <a class="page-link" href="#">...</a>
+                </li>
+
+                <li class="page-item" v-for="page in middle">
+                    <a class="page-link" :href="'dashboard?' + query + '&pagenum=' + page.toString()">{{ page }}</a>
+                </li>
+
+                <li class="page-item disabled" v-if="(currp + 2) <= maxp - 2">
+                    <a class="page-link" href="#">...</a>
+                </li>
+
+                <li class="page-item" v-if="(currp + 2) < maxp">
+                    <a class="page-link" :href="'dashboard?' + query + '&pagenum=' + maxpage">{{ maxpage }}</a>
+                </li>
+
+            </ul>
+        </nav>
+
+    </div>
+    `
+})
+
+
 
 var app1 = new Vue({
     el: '#app',
@@ -92,4 +147,8 @@ var app1 = new Vue({
             alert(' I am clicked');
         }
     }
+})
+
+var pageselectapp = new Vue({
+    el: '#pageselectapp'
 })
