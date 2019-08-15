@@ -4,6 +4,7 @@ from AmazonCognito.AmazonCognito import AmazonCognito
 from functools import wraps
 import time
 from urllib.parse import quote
+import requests
 
 app = Flask(__name__, static_url_path='/static')
 # login_manager = LoginManager()
@@ -17,6 +18,8 @@ amazonCognito = AmazonCognito("7m1prek8gppfutbgs11kukg8tg",
                               "https://labtracc.auth.us-east-1.amazoncognito.com",
                               current_website_addr + "/users/callback")
 app.secret_key = b'o29asdgjdfglsklksfgkkjlkfdkjhkcsjdjsl;kfbhvjijioejweqjsfdsdjfoijicj%sdfd3r3f0a*'
+
+base_api_url = 'https://0b8noolotb.execute-api.us-east-1.amazonaws.com/dev/'
 
 
 def login_required(f):
@@ -82,42 +85,100 @@ def refresh_session():
 def index():
     return render_template("index.html")
 
-
 @app.route("/dashboard")
+def redirdashboard():
+    # Find the default groupID and redirect to that.
+    return "hello"
+
+
+@app.route("/dashboard/<groupID>")
 @login_required
-def dashboard():
-    # if 'jwt' in session.keys() and session['jwt'] is not None and amazonCognito.check_logged_in(
-    # 		session['jwt']['access_token']):
-    # print(amazonCognito.get_user_info(session['jwt']['access_token']))
+def dashboard(groupID):
+    q = request.args.get('q')
 
-    import random
-    list_of_questions = [
-        {
-            'questiontext': 'Where is the lamb sauce?',
-            'questionurl': 'question?id=' + random.choice(['1','2','3','4','5','6']),
-            'moreinfo': '''Hello, this is Gordon Ramsey, chef bloody extraordinaire. I hear you are starting a cooking show and I would like to send you my special pasta recipe to get you started...''',
-            'username': 'GordonRamsey',
-            'userurl': 'users?id=' + '69',
-            'numcomments': '6',
-            'timestamp': 'July 4th, 1776',
-            'liked': True,
-            'numberlikes': 12,
-            'tags': ['food', 'chemistry', 'food chemistry']
+    pageNum = request.args.get('pagenum')
+
+    if q is None:
+        q = ""
+
+    if pageNum is None:
+        pageNum = 1
+    else:
+        pageNum = int(pageNum)
+
+    print(q)
+    groupID
+    userName = g.user['username']
+    frm = (pageNum - 1) * 10
+
+    search_url = base_api_url + 'qa/search'
+
+    r = requests.get(search_url, json={
+        'q': q,
+        'groupID': groupID,
+        'userName': userName,
+        'from': frm
+        })
+
+    returned_search_results = r.json()
+
+    print(returned_search_results)
+
+    count = int(returned_search_results['count'])
+    maxpage = int(count/10)
+
+    hits = returned_search_results['docs']
+    returned_hits = []
+    for item in hits:
+        returned_hits.append(item['_id'])
+
+    print(returned_hits)
+
+    # get the returned_hits using a get request
+    get_questions_url = base_api_url + 'qa/question'
+    
+    r = requests.get(get_questions_url, params={"_id": returned_hits})
+
+    print(r.text)
+
+    questions = r.json()
+
+    # get whether or not the user liked each question
+    get_likes_url = base_api_url + 'qa/likes'
+    r = requests.get(get_likes_url, json={'userName': userName, 'inputIDs': returned_hits})
+
+    like_stats = r.json()
+
+    # iterate through and fill in the questions
+    list_of_questions = []
+    for question in questions:
+        if question is None:
+            continue
+            
+        liked = False
+        if question["_id"]["$oid"] in like_stats:
+            liked = like_stats[question["_id"]["$oid"]]
+
+        question_dict = {
+            'questiontext': question['question'],
+            'questionurl': 'question?id=' + question["_id"]["$oid"],
+            'moreinfo': question["body"],
+            'username': question["email"],
+            'userurl': 'users?id=' + question['userName'],
+            'numcomments': len(question['answers']) if 'answers' in question else 0,
+            'timestamp': time.ctime(question['timestamp']),
+            'liked': liked,
+            'numberlikes': len(question['upvotes']) if 'upvotes' in question else 0,
+            'tags': question['tags']
         }
-    ]
-
-    for i in range(10):
-        temp = list_of_questions[0].copy()
-        temp['questionurl'] = 'question?id=' + random.choice(['1','2','3','4','5','6'])
-        temp['numlikes'] = random.choice(['1','2','3','4','5','6','7','8','9','10','11','12'])
-        list_of_questions.append(temp)
+        list_of_questions.append(question_dict)
 
     print(list_of_questions)
 
     page_props = {
-        'currentpage': 4,
-        'maxpage': 22,
-        'query': quote('lamb sauce')
+        'currentpage': pageNum,
+        'maxpage': maxpage,
+        'query': quote(q)
     }
 
     return render_template("dashboard.html", questions=list_of_questions, paginator=page_props)
@@ -196,6 +257,8 @@ def user_page():
 
 @app.route("/testpost", methods=['POST'])
 def test_post():
+    print(request.form.to_dict())
+    print(request.json)
     return '', 200
 
 if __name__ == '__main__':
