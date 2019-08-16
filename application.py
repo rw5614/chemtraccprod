@@ -42,6 +42,7 @@ def login_required(f):
 def not_authorized(e):
     return render_template("401.html"), 401
 
+
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html'), 404
@@ -85,10 +86,19 @@ def refresh_session():
 def index():
     return render_template("index.html")
 
+
 @app.route("/dashboard")
 def redirdashboard():
     # Find the default groupID and redirect to that.
-    return "hello"
+    get_groups_url = base_api_url + 'qa/group'
+
+    r = requests.get(get_groups_url, json={'userName': g.user['username']})
+
+    print(r.json())
+    # Will throw an error if there are no groups!!
+    first_group = r.json()[0]
+
+    return redirect(url_for('dashboard', groupID=first_group))
 
 
 @app.route("/dashboard/<groupID>")
@@ -118,7 +128,7 @@ def dashboard(groupID):
         'groupID': groupID,
         'userName': userName,
         'from': frm
-        })
+    })
 
     returned_search_results = r.json()
 
@@ -136,7 +146,7 @@ def dashboard(groupID):
 
     # get the returned_hits using a get request
     get_questions_url = base_api_url + 'qa/question'
-    
+
     r = requests.get(get_questions_url, params={"_id": returned_hits})
 
     print(r.text)
@@ -145,7 +155,8 @@ def dashboard(groupID):
 
     # get whether or not the user liked each question
     get_likes_url = base_api_url + 'qa/likes'
-    r = requests.get(get_likes_url, json={'userName': userName, 'inputIDs': returned_hits})
+    r = requests.get(get_likes_url, json={
+                     'userName': userName, 'inputIDs': returned_hits})
 
     like_stats = r.json()
 
@@ -154,7 +165,7 @@ def dashboard(groupID):
     for question in questions:
         if question is None:
             continue
-            
+
         liked = False
         if question["_id"]["$oid"] in like_stats:
             liked = like_stats[question["_id"]["$oid"]]
@@ -239,27 +250,34 @@ def callback():
 
     return redirect("../")
 
+
 @app.route("/team")
 def team():
     return render_template("team.html")
+
 
 @app.route("/chartdata")
 def chartdata():
     return jsonify(something=1, other=2)
 
+
 @app.route("/question")
 def show_question():
     return render_template('question.html')
+
 
 @app.route("/user")
 def user_page():
     return render_template('user.html')
 
-@app.route("/testpost", methods=['POST'])
-def test_post():
+
+@app.route("/postlike", methods=['POST'])
+@login_required
+def post_like():
     print(request.form.to_dict())
     print(request.json)
     return '', 200
+
 
 if __name__ == '__main__':
     app.run()
