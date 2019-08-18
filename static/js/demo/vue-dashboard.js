@@ -16,7 +16,7 @@ Vue.component('question', {
                     <!-- Question goes here -->
                     <div class="mb-1">
                         <h5>
-                            <a :href="questionurl">{{ questiontext }}</a>
+                            <a :href="'/' + questionurl">{{ questiontext }}</a>
                             <br>
                             <span v-for="tag in tags" class="badge badge-light text-lowercase">{{ tag }}</span>
                         </h5>
@@ -27,7 +27,7 @@ Vue.component('question', {
                     </div>
                     <!-- Details go here -->
                     <div class="mb-1">
-                        <p>{{ moreinfo }}</p>
+                        <p v-html="moreinfo"></p>
                     </div>
                 </div>
 
@@ -93,6 +93,8 @@ Vue.component('pageselector', {
             };
         };
 
+        console.log(this.baseurl)
+
         console.log(middle)
 
         return {
@@ -101,14 +103,14 @@ Vue.component('pageselector', {
             middle: middle
         }
     },
-    props: ['currentpage', 'maxpage', 'query'],
+    props: ['currentpage', 'maxpage', 'query', 'baseurl'],
     template:`
     <div class="card-transparent mb-4">
         <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-center">
 
                 <li class="page-item" v-if="currp > 3">
-                    <a class="page-link" :href="'dashboard?' + query + '&pagenum=' + '1'">1</a>
+                    <a class="page-link" :href="baseurl + '?q=' + query + '&pagenum=' + '1'">1</a>
                 </li>
 
                 <li class="page-item disabled" v-if="(currp - 2) > 2">
@@ -116,7 +118,7 @@ Vue.component('pageselector', {
                 </li>
 
                 <li class="page-item" v-for="page in middle">
-                    <a class="page-link" :href="'dashboard?' + query + '&pagenum=' + page.toString()">{{ page }}</a>
+                    <a class="page-link" :href="baseurl + '?q=' + query + '&pagenum=' + page.toString()">{{ page }}</a>
                 </li>
 
                 <li class="page-item disabled" v-if="(currp + 2) <= maxp - 2">
@@ -124,7 +126,7 @@ Vue.component('pageselector', {
                 </li>
 
                 <li class="page-item" v-if="(currp + 2) < maxp">
-                    <a class="page-link" :href="'dashboard?' + query + '&pagenum=' + maxpage">{{ maxpage }}</a>
+                    <a class="page-link" :href="baseurl + '?q=' + query + '&pagenum=' + maxpage">{{ maxpage }}</a>
                 </li>
 
             </ul>

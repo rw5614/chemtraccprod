@@ -18,7 +18,8 @@
                 </span>
             </div>
         </form>
-        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+
+        <a href="{{ url_for('ask', groupID=groupID) }}" id="input" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
                 class="fas fa-question fa-sm text-white-50"></i> Ask a Question</a>
 
         <h1 class="h3 mb-0 text-gray-800">The Knowledge Exchange</h1>
@@ -44,7 +45,10 @@
     <div class="row">
 
         <div id="pageselectapp" class="col-xl-12">
-            <pageselector currentpage="{{ paginator.currentpage }}" maxpage="{{ paginator.maxpage }}" query="{{ paginator.query }}"></pageselector>
+
+            <pageselector currentpage="{{ paginator.currentpage }}" maxpage="{{ paginator.maxpage }}"
+                query="{{ paginator.query }}" baseurl="{{ url_for('dashboard', groupID=groupID) }}"></pageselector>
+        
         </div>
     </div>
 
@@ -60,14 +64,48 @@
 
 <!-- Page level custom scripts -->
 <script src="{{ url_for('static', filename='js/demo/vue-dashboard.js')}}"></script>
+
 <script>
     $(function () {
         $("#search_query")
-            .popover({content: "Try this query: where is the lamb sauce tags=cooking", placement: "top" })
+            .popover({ content: "Try this query: where is the lamb sauce tags=cooking", placement: "top" })
             .blur(function () {
                 $(this).popover('hide');
             });
     });
 </script>
+
+<script>
+    var IMAGE_MIME_REGEX = /^image\/(p?jpeg|gif|png)$/i;
+
+    var loadImage = function (file) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            var img = document.createElement('img');
+            img.src = e.target.result;
+
+            var range = window.getSelection().getRangeAt(0);
+            range.deleteContents();
+            range.insertNode(img);
+        };
+        reader.readAsDataURL(file);
+    };
+
+    document.onpaste = function (e) {
+        if (Boolean(window.chrome)) {
+            var items = e.clipboardData.items;
+
+            for (var i = 0; i < items.length; i++) {
+                if (IMAGE_MIME_REGEX.test(items[i].type)) {
+                    loadImage(items[i].getAsFile());
+                    return;
+                }
+            }
+        };
+
+        // Normal paste handling here
+    }
+</script>
+
 
 {% endblock %}

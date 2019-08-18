@@ -1,0 +1,80 @@
+{% extends "loggedinlayout.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block body %}
+
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <form>
+            <div class="input-group">
+                <input id="search_query" class="form-control" placeholder="Search" type="text" name="q">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="submit">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </span>
+            </div>
+        </form>
+        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                class="fas fa-question fa-sm text-white-50"></i> Ask a Question</a>
+
+        <h1 class="h3 mb-0 text-gray-800">Ask a Question</h1>
+    </div>
+
+
+    <div class="row">
+        <div class="col-xl-12 col-md-6 mb-1">
+            <div id="addanswer">
+                <addanswer showheader="False" value="someValue" submiturl="{{'/ask/' + groupID}}"></addanswer>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<!-- /.container-fluid -->
+{% endblock %}
+
+
+{% block scripts %}
+<!-- Page level plugins -->
+
+<!-- Page level custom scripts -->
+<script src="{{ url_for('static', filename='js/demo/vue-ask.js') }}"></script>
+<script>
+var IMAGE_MIME_REGEX = /^image\/(p?jpeg|gif|png)$/i;
+
+var loadImage = function (file) {
+    var reader = new FileReader();
+    reader.onload = function(e){
+        var img = document.createElement('img');
+        img.src = e.target.result;
+        
+        var range = window.getSelection().getRangeAt(0);
+        range.deleteContents();
+        range.insertNode(img);
+    };
+    reader.readAsDataURL(file);
+};
+
+document.onpaste = function(e){
+    if (Boolean(window.chrome)){
+        var items = e.clipboardData.items;
+
+        for (var i = 0; i < items.length; i++) {
+            if (IMAGE_MIME_REGEX.test(items[i].type)) {
+                loadImage(items[i].getAsFile());
+                return;
+            }
+        }
+    };
+    
+    // Normal paste handling here
+}
+</script>
+
+{% endblock %}

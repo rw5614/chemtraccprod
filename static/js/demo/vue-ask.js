@@ -76,6 +76,8 @@ Vue.component('addanswer', {
                 <div class="col mr-2">
                     <form v-bind:action="submiturl" method="post">
                         <div class="form-group" style="overflow: auto;">
+                            <input type="text" id="question" name="question" class="form-control" style="margin-top: 0px; margin-bottom: 0px;"></input>
+
                             <div style="height: 189px; border:1px solid black; resize:both; overflow:auto; border-color:#808080" @focusout="updateMainMessage" v-html="mainMessage" contenteditable="true"></div>
                             <textarea class="d-none" name="message" :value="mainMessage"></textarea>
 

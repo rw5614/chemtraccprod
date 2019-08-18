@@ -5,6 +5,7 @@ from functools import wraps
 import time
 from urllib.parse import quote
 import requests
+import math
 
 app = Flask(__name__, static_url_path='/static')
 # login_manager = LoginManager()
@@ -88,6 +89,7 @@ def index():
 
 
 @app.route("/dashboard")
+@login_required
 def redirdashboard():
     # Find the default groupID and redirect to that.
     get_groups_url = base_api_url + 'qa/group'
@@ -135,7 +137,7 @@ def dashboard(groupID):
     print(returned_search_results)
 
     count = int(returned_search_results['count'])
-    maxpage = int(count/10)
+    maxpage = int(math.ceil(count/10))
 
     hits = returned_search_results['docs']
     returned_hits = []
@@ -191,8 +193,9 @@ def dashboard(groupID):
         'maxpage': maxpage,
         'query': quote(q)
     }
+    print(page_props)
 
-    return render_template("dashboard.html", questions=list_of_questions, paginator=page_props)
+    return render_template("dashboard.html", questions=list_of_questions, paginator=page_props, groupID=groupID)
 
 
 @app.route("/search")
@@ -215,6 +218,36 @@ def add():
     # 		session['jwt']['access_token']):
     # print(amazonCognito.get_user_info(session['jwt']['access_token']))
     return render_template("add.html")
+
+
+@app.route("/ask/<groupID>", methods=['GET', 'POST'])
+@login_required
+def ask(groupID):
+    if request.method == "GET":
+        return render_template("ask.html", groupID=groupID)
+    else:
+        # Process tags
+        inputs = request.form.to_dict()
+        print(inputs)
+
+        tags = []
+        for tag in inputs['tags'].split(','):
+            temp_tag = tag.strip()
+            tags.append(temp_tag)
+
+        # Send the request on.
+        post_question_url = base_api_url + 'qa/question'
+        q_json = {
+            'userName': g.user['username'],
+            'groupId': groupID,
+            'question': inputs['question'],
+            'body': inputs['message'],
+            'tags': tags
+        }
+        r = requests.post(post_question_url, json=q_json)
+
+        print(r.json())
+        return redirect(url_for('dashboard', groupID=groupID))
 
 
 @app.route("/login")
