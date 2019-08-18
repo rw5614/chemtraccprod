@@ -198,28 +198,6 @@ def dashboard(groupID):
     return render_template("dashboard.html", questions=list_of_questions, paginator=page_props, groupID=groupID)
 
 
-@app.route("/search")
-@login_required
-def search():
-    # if 'jwt' in session.keys() and session['jwt'] is not None and amazonCognito.check_logged_in(
-    # 		session['jwt']['access_token']):
-    # print(amazonCognito.get_user_info(session['jwt']['access_token']))
-
-    # TODO:I just hardcoded some items here. So this is obv not good.
-    items = [{'name': 'steve', 'location': 'here',
-              'description': 'a dude', 'timestamp': 12353224}]
-    return render_template("search.html", items=items)
-
-
-@app.route("/add")
-@login_required
-def add():
-    # if 'jwt' in session.keys() and session['jwt'] is not None and amazonCognito.check_logged_in(
-    # 		session['jwt']['access_token']):
-    # print(amazonCognito.get_user_info(session['jwt']['access_token']))
-    return render_template("add.html")
-
-
 @app.route("/ask/<groupID>", methods=['GET', 'POST'])
 @login_required
 def ask(groupID):
@@ -284,19 +262,30 @@ def callback():
     return redirect("../")
 
 
-@app.route("/team")
-def team():
-    return render_template("team.html")
-
-
-@app.route("/chartdata")
-def chartdata():
-    return jsonify(something=1, other=2)
-
-
-@app.route("/question")
+@app.route("/question", methods=['GET', 'POST'])
+@login_required
 def show_question():
+    id = request.args.get('id')
+    
+    # get the question answer thread from the id and username
+
+    get_qathread_url = base_api_url + 'qa/qathread'
+    
+    r = requests.get(get_qathread_url, json={
+        'userName': g.user['username'],
+        'questionID': id
+    })
+
+    print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+    print(r.json())
+
     return render_template('question.html')
+
+
+@app.route("/submittoquestion", methods=['POST'])
+@login_required
+def submitanswer():
+    return redirect('../')
 
 
 @app.route("/user")

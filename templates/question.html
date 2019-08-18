@@ -27,30 +27,14 @@
     <div class="row">
 
         <div class="col-xl-12 col-md-6 mb-2">
-            <div class="card border-left-primary shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <!-- Question goes here -->
-                            <div class="mb-1">
-                                <h5><a href="google.com">I keep setting fire to my lab bench! Help!!</a></h5>
-                            </div>
-                            <!-- Username goes here -->
-                            <div class="text-xs mb-1">
-                                <a href="google.com" style="color: #808080">Steve-O</a>
-                            </div>
-                            <!-- Details go here -->
-                            <div class="mb-1">
-                                <p>I really want to do this thing. Help me, please! Here are more details.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div id='question'>
+                <question answertext="Why are you running?" username="Raymond" userurl="users?id=420"></question>
             </div>
         </div>
 
         <div class="col-xl-12 col-md-6 mb-1">
             <div id='app'>
+                <!-- Add a for loop here using jinja -->
                 <answer answertext="Why are you running?" username="Raymond" userurl="users?id=420"></answer>
             </div>
         </div>
@@ -82,35 +66,35 @@
 <!-- Page level custom scripts -->
 <script src="static/js/demo/vue-question.js"></script>
 <script>
-var IMAGE_MIME_REGEX = /^image\/(p?jpeg|gif|png)$/i;
+    var IMAGE_MIME_REGEX = /^image\/(p?jpeg|gif|png)$/i;
 
-var loadImage = function (file) {
-    var reader = new FileReader();
-    reader.onload = function(e){
-        var img = document.createElement('img');
-        img.src = e.target.result;
-        
-        var range = window.getSelection().getRangeAt(0);
-        range.deleteContents();
-        range.insertNode(img);
+    var loadImage = function (file) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            var img = document.createElement('img');
+            img.src = e.target.result;
+
+            var range = window.getSelection().getRangeAt(0);
+            range.deleteContents();
+            range.insertNode(img);
+        };
+        reader.readAsDataURL(file);
     };
-    reader.readAsDataURL(file);
-};
 
-document.onpaste = function(e){
-    if (Boolean(window.chrome)){
-        var items = e.clipboardData.items;
+    document.onpaste = function (e) {
+        if (Boolean(window.chrome)) {
+            var items = e.clipboardData.items;
 
-        for (var i = 0; i < items.length; i++) {
-            if (IMAGE_MIME_REGEX.test(items[i].type)) {
-                loadImage(items[i].getAsFile());
-                return;
+            for (var i = 0; i < items.length; i++) {
+                if (IMAGE_MIME_REGEX.test(items[i].type)) {
+                    loadImage(items[i].getAsFile());
+                    return;
+                }
             }
-        }
-    };
-    
-    // Normal paste handling here
-}
+        };
+
+        // Normal paste handling here
+    }
 </script>
 
 {% endblock %}
