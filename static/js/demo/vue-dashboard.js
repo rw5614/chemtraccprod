@@ -63,7 +63,7 @@ Vue.component('question', {
             console.log(this.questionurl);
             console.log(likeValue);
 
-            this.$http.post('/testpost', {toggle: likeValue}).then(response => {
+            this.$http.post('/postlike', {toggle: likeValue, identifier: this.questionurl}).then(response => {
 
                 // successfully sent
                 console.log('true')

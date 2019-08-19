@@ -159,10 +159,10 @@ Vue.component('answer', {
     methods: {
         toggleLike: function (likeValue) {
             // If 1 then like. If 0 then remove the like. If -1 then give dislike.
-            console.log(this.questionurl);
+            console.log(this.answerid);
             console.log(likeValue);
 
-            this.$http.post('/testpost', {toggle: likeValue}).then(response => {
+            this.$http.post('/postlike', {toggle: likeValue, identifier: this.answerid}).then(response => {
 
                 // successfully sent
                 console.log('true')

@@ -160,7 +160,12 @@ def dashboard(groupID):
     r = requests.get(get_likes_url, json={
                      'userName': userName, 'inputIDs': returned_hits})
 
+    print(get_likes_url)
+
+    print(r)
+
     like_stats = r.json()
+    print(like_stats)
 
     # iterate through and fill in the questions
     list_of_questions = []
@@ -169,8 +174,12 @@ def dashboard(groupID):
             continue
 
         liked = False
+
+        print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+        print(question["_id"]["$oid"])
         if question["_id"]["$oid"] in like_stats:
-            liked = like_stats[question["_id"]["$oid"]]
+            liked = like_stats[question["_id"]["$oid"]]['userLiked']
+            print(liked)
 
         question_dict = {
             'questiontext': question['question'],
@@ -181,7 +190,7 @@ def dashboard(groupID):
             'numcomments': len(question['answers']) if 'answers' in question else 0,
             'timestamp': time.ctime(question['timestamp']),
             'liked': liked,
-            'numberlikes': len(question['upvotes']) if 'upvotes' in question else 0,
+            'numberlikes': len(question['liked_by']) if 'liked_by' in question else 0,
             'tags': question['tags']
         }
         list_of_questions.append(question_dict)
@@ -300,10 +309,23 @@ def user_page():
 @login_required
 def post_like():
     # We need an id of what to like, and a toggle value.
-    # Janky but we receive the questionurl and a toggle value.
-
-    print(request.form.to_dict())
+    # Janky but we receive the questionurl and a toggle value.    
     print(request.json)
+
+    id = request.json['identifier']
+    id = id.split("id=")[-1]
+
+    print(id)
+
+    change_likes_url = base_api_url + 'qa/likes'
+    r = requests.post(change_likes_url, json={
+        'userName': g.user['username'],
+        'itemID': id,
+        'changeLike': request.json['toggle']
+    })
+
+    print(r)
+
     return 'Successfully updated like!', 200
 
 
