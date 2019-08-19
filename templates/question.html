@@ -31,23 +31,35 @@
                           questionurl="question?id={{ QAThread['_id']['$oid'] }}"
                           moreinfo="{{ QAThread['body'] }}"
                           username="{{ QAThread['email'] }}" userurl="users?id={{ QAThread['userName'] }}"
-                          numbercomments="{{ len(QAThread['comments']) }}" timestamp="{{ QAThread['timestamp'] }}"
-                          liked="True"
-                          numberlikes="12"
-                          v-bind:tags="[&#39;food&#39;, &#39;chemistry&#39;, &#39;food chemistry&#39;]">
+                          numbercomments="{{ QAThread['comments']|length }}" timestamp="{{ QAThread['timestamp'] }}"
+                          liked="{{ g.user["username"] in QAThread["liked_by"] }}"
+                          numberlikes="{{ QAThread["liked_by"]|length }}"
+                          v-bind:tags="{{ QAThread["tags"] }}">
                 </question>
             </div>
 
             <div class="col-xl-12 col-md-6 mb-1">
                 <div id='app'>
-                    <!-- Add a for loop here using jinja -->
-                    <answer answertext="Why are you running?" username="Raymond" userurl="users?id=420" numberlikes="5"
-                            liked="True" timestamp="now">
-                    <span slot="comments">
-                        <comment text="some comment" username="steven" userurl="something" timestamp="now"></comment>
-                        <comment text="second comment" username="joe" userurl="something" timestamp="future"></comment>
-                    </span>
-                    </answer>
+                    {% for answer in QAThread["answers"] %}
+                        <answer answertext="{{ answer["answer"] }}" username="{{ answer["email"] }}"
+                                userurl="users?id={{ QAThread["userName"] }}"
+                                numberlikes="{{ answer["liked_by"]|length }}"
+                                liked="{{ g.user["userName"] in QAThread["liked_by"] }}"
+                                timestamp="{{ answer["timestamp"] }}">
+                            <span slot="comments">
+                            {% for comment in answer["comments"] %}
+                                <comment text="{{ comment["comment"] }}"
+                                        {% if "email" in comment %}
+                                         username="{{ comment["email"] }}"
+                                        {% else %}
+                                         username="somebody"
+                                        {% endif %}
+                                         userurl="users?id={{ comment["userName"] }}"
+                                         timestamp="{{ comment["timestamp"] }}"></comment>
+                            {% endfor %}
+                            </span>
+                        </answer>
+                    {% endfor %}
                 </div>
             </div>
 
