@@ -279,6 +279,9 @@ def show_question():
     print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
     print(r.json())
 
+    qathread = r.json()
+
+
     return render_template('question.html')
 
 
@@ -296,9 +299,12 @@ def user_page():
 @app.route("/postlike", methods=['POST'])
 @login_required
 def post_like():
+    # We need an id of what to like, and a toggle value.
+    # Janky but we receive the questionurl and a toggle value.
+
     print(request.form.to_dict())
     print(request.json)
-    return '', 200
+    return 'Successfully updated like!', 200
 
 
 if __name__ == '__main__':
