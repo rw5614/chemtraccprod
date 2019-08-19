@@ -276,10 +276,12 @@ def show_question():
         'questionID': id
     })
 
+    QAThread = r.json()
+    QAThread["timestamp"] = time.ctime(QAThread["timestamp"])
     print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
-    print(r.json())
+    print(QAThread)
 
-    return render_template('question.html')
+    return render_template('question.html', QAThread=QAThread)
 
 
 @app.route("/submittoquestion", methods=['POST'])

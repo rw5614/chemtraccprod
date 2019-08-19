@@ -4,104 +4,108 @@
 
 {% block body %}
 
-<div class="container-fluid">
+    <div class="container-fluid">
 
-    <!-- Page Heading -->
-    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <form>
-            <div class="input-group">
-                <input id="search_query" class="form-control" placeholder="Search" type="text" name="q">
-                <span class="input-group-btn">
+        <!-- Page Heading -->
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <form>
+                <div class="input-group">
+                    <input id="search_query" class="form-control" placeholder="Search" type="text" name="q">
+                    <span class="input-group-btn">
                     <button class="btn btn-default" type="submit">
                         <i class="fa fa-search"></i>
                     </button>
                 </span>
-            </div>
-        </form>
-        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                class="fas fa-question fa-sm text-white-50"></i> Ask a Question</a>
+                </div>
+            </form>
+            <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                    class="fas fa-question fa-sm text-white-50"></i> Ask a Question</a>
 
-        <h1 class="h3 mb-0 text-gray-800">The Knowledge Exchange</h1>
-    </div>
-
-    <div class="row">
-
-        <div class="col-xl-12 col-md-6 mb-2" id='question'>
-            <question questiontext="Where is the lamb sauce?" questionurl="question?id=4"
-                moreinfo="Hello, this is Gordon Ramsey, chef bloody extraordinaire. I hear you are starting a cooking show and I would like to send you my special pasta recipe to get you started..."
-                username="GordonRamsey" userurl="users?id=69" numbercomments="6" timestamp="July 4th, 1776" liked="True"
-                numberlikes="12" v-bind:tags="[&#39;food&#39;, &#39;chemistry&#39;, &#39;food chemistry&#39;]">
-            </question>
+            <h1 class="h3 mb-0 text-gray-800">The Knowledge Exchange</h1>
         </div>
 
-        <div class="col-xl-12 col-md-6 mb-1">
-            <div id='app'>
-                <!-- Add a for loop here using jinja -->
-                <answer answertext="Why are you running?" username="Raymond" userurl="users?id=420" numberlikes="5" liked="True" timestamp="now">
+        <div class="row">
+
+            <div class="col-xl-12 col-md-6 mb-2" id='question'>
+                <question questiontext="{{ QAThread['question'] }}"
+                          questionurl="question?id={{ QAThread['_id']['$oid'] }}"
+                          moreinfo="{{ QAThread['body'] }}"
+                          username="{{ QAThread['email'] }}" userurl="users?id={{ QAThread['userName'] }}"
+                          numbercomments="{{ len(QAThread['comments']) }}" timestamp="{{ QAThread['timestamp'] }}"
+                          liked="True"
+                          numberlikes="12"
+                          v-bind:tags="[&#39;food&#39;, &#39;chemistry&#39;, &#39;food chemistry&#39;]">
+                </question>
+            </div>
+
+            <div class="col-xl-12 col-md-6 mb-1">
+                <div id='app'>
+                    <!-- Add a for loop here using jinja -->
+                    <answer answertext="Why are you running?" username="Raymond" userurl="users?id=420" numberlikes="5"
+                            liked="True" timestamp="now">
                     <span slot="comments">
                         <comment text="some comment" username="steven" userurl="something" timestamp="now"></comment>
                         <comment text="second comment" username="joe" userurl="something" timestamp="future"></comment>
                     </span>
-                </answer>
+                    </answer>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- <div id="app">
+            <comment></comment>
+        </div> -->
+
+        <div class="row">
+            <div class="col-xl-12 col-md-6 mb-1">
+                <div id="addanswer">
+                    <addanswer showheader="False" value="someValue"></addanswer>
+                </div>
             </div>
         </div>
 
     </div>
 
-    <!-- <div id="app">
-        <comment></comment>
-    </div> -->
 
-    <div class="row">
-        <div class="col-xl-12 col-md-6 mb-1">
-            <div id="addanswer">
-                <addanswer showheader="False" value="someValue"></addanswer>
-            </div>
-        </div>
-    </div>
-
-</div>
-
-
-<!-- /.container-fluid -->
+    <!-- /.container-fluid -->
 {% endblock %}
 
 
 {% block scripts %}
-<!-- Page level plugins -->
+    <!-- Page level plugins -->
 
-<!-- Page level custom scripts -->
-<script src="static/js/demo/vue-question.js"></script>
-<script>
-    var IMAGE_MIME_REGEX = /^image\/(p?jpeg|gif|png)$/i;
+    <!-- Page level custom scripts -->
+    <script src="static/js/demo/vue-question.js"></script>
+    <script>
+        var IMAGE_MIME_REGEX = /^image\/(p?jpeg|gif|png)$/i;
 
-    var loadImage = function (file) {
-        var reader = new FileReader();
-        reader.onload = function (e) {
-            var img = document.createElement('img');
-            img.src = e.target.result;
+        var loadImage = function (file) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                var img = document.createElement('img');
+                img.src = e.target.result;
 
-            var range = window.getSelection().getRangeAt(0);
-            range.deleteContents();
-            range.insertNode(img);
+                var range = window.getSelection().getRangeAt(0);
+                range.deleteContents();
+                range.insertNode(img);
+            };
+            reader.readAsDataURL(file);
         };
-        reader.readAsDataURL(file);
-    };
 
-    document.onpaste = function (e) {
-        if (Boolean(window.chrome)) {
-            var items = e.clipboardData.items;
+        document.onpaste = function (e) {
+            if (Boolean(window.chrome)) {
+                var items = e.clipboardData.items;
 
-            for (var i = 0; i < items.length; i++) {
-                if (IMAGE_MIME_REGEX.test(items[i].type)) {
-                    loadImage(items[i].getAsFile());
-                    return;
+                for (var i = 0; i < items.length; i++) {
+                    if (IMAGE_MIME_REGEX.test(items[i].type)) {
+                        loadImage(items[i].getAsFile());
+                        return;
+                    }
                 }
             }
-        };
-
-        // Normal paste handling here
-    }
-</script>
+            // Normal paste handling here
+        }
+    </script>
 
 {% endblock %}
