@@ -266,11 +266,11 @@ def callback():
 @login_required
 def show_question():
     id = request.args.get('id')
-    
+
     # get the question answer thread from the id and username
 
     get_qathread_url = base_api_url + 'qa/qathread'
-    
+
     r = requests.get(get_qathread_url, json={
         'userName': g.user['username'],
         'questionID': id
@@ -298,9 +298,12 @@ def user_page():
 @app.route("/postlike", methods=['POST'])
 @login_required
 def post_like():
+    # We need an id of what to like, and a toggle value.
+    # Janky but we receive the questionurl and a toggle value.
+
     print(request.form.to_dict())
     print(request.json)
-    return '', 200
+    return 'Successfully updated like!', 200
 
 
 if __name__ == '__main__':

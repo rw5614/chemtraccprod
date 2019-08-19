@@ -63,7 +63,7 @@ Vue.component('question', {
             console.log(this.questionurl);
             console.log(likeValue);
 
-            this.$http.post('/testpost', {toggle: likeValue}).then(response => {
+            this.$http.post('/postlike', {toggle: likeValue, identifier: this.questionurl}).then(response => {
 
                 // successfully sent
                 console.log('true')
@@ -96,7 +96,7 @@ Vue.component('answer', {
             show: false
         }
     },
-    props: ['answertext', 'username', 'userurl', 'numberlikes', 'liked', 'timestamp'],
+    props: ['answertext', 'username', 'userurl', 'numberlikes', 'liked', 'timestamp', 'answerid'],
     template: `
         <div class="card rounded-0 h-100 py-2">
             <div class="card-body">
