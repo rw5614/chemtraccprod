@@ -123,6 +123,8 @@ def dashboard(groupID):
 
     if q is None:
         q = ""
+    else:
+        q = q.replace('?', ' ')
 
     if pageNum is None:
         pageNum = 1
@@ -146,6 +148,14 @@ def dashboard(groupID):
     returned_search_results = r.json()
 
     print(returned_search_results)
+    
+    if returned_search_results['count'] == 0:
+        page_props = {
+            'currentpage': 1,
+            'maxpage': 1,
+            'query': quote(q)
+        }
+        return render_template("dashboard.html", questions=[], paginator=page_props, groupID=groupID)
 
     count = int(returned_search_results['count'])
     maxpage = int(math.ceil(count/10))
@@ -186,7 +196,6 @@ def dashboard(groupID):
 
         liked = False
 
-        print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
         print(question["_id"]["$oid"])
         if question["_id"]["$oid"] in like_stats:
             liked = like_stats[question["_id"]["$oid"]]['userLiked']
