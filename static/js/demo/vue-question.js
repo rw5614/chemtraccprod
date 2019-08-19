@@ -144,7 +144,7 @@ Vue.component('answer', {
 
                         <a href="javascript:void(0)" v-on:click="show=true" v-if="!show" style="font-size:x-small">Add a comment</a>
 
-                        <form v-if="show" v-bind:action="'/postcomment?id=' + answerid">
+                        <form method="post" v-if="show" v-bind:action="'/postcomment?id=' + answerid">
                             <div class="form-group" style="overflow:auto">
                                 <textarea type="text" name="comment" class="form-control" id="comment" style="margin-top: 0px; margin-bottom: 0px; height: 189px;"></textarea>
                             </div>
