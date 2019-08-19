@@ -275,23 +275,22 @@ def callback():
 @login_required
 def show_question():
     id = request.args.get('id')
-    
+
     # get the question answer thread from the id and username
 
     get_qathread_url = base_api_url + 'qa/qathread'
-    
+
     r = requests.get(get_qathread_url, json={
         'userName': g.user['username'],
         'questionID': id
     })
 
+    QAThread = r.json()
+    QAThread["timestamp"] = time.ctime(QAThread["timestamp"])
     print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
-    print(r.json())
+    print(QAThread)
 
-    qathread = r.json()
-
-
-    return render_template('question.html')
+    return render_template('question.html', QAThread=QAThread)
 
 
 @app.route("/submittoquestion", methods=['POST'])
