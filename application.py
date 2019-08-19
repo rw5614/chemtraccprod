@@ -51,31 +51,42 @@ def page_not_found(e):
 
 @app.before_request
 def refresh_session():
-    print("base_url is ")
-    print(request.base_url)
     # Checks if the session cookie has a jwt, and if it's valid.
     # Then, proceeds to refresh it if it is. If not valid, then clear the session cookie again, for safe measure.
     if 'jwt' in session.keys() and session['jwt'] is not None \
             and 'access_token' in session['jwt'] \
-            and session['jwt']['access_token'] is not None \
-            and amazonCognito.check_logged_in(session['jwt']['access_token']):
-        # TODO: check_logged_in and get_user_info both check if the user is logged in. COuld we combine these into one?
-        print(session['jwt'])
-        # The user is logged in at the moment.
-        g.user = amazonCognito.get_user_info(session['jwt']['access_token'])
-        if 'refresh_token' in session['jwt'] and session['jwt']['refresh_token'] is not None:
-            # Only refresh the token if there's less than 15 minutes left.
-            if 'time_of_refresh' in session['jwt'] and int(time.time()) > session['jwt']['time_of_refresh'] + 2700:
-                new_tokens = amazonCognito.refresh(
-                    session['jwt']['refresh_token'])
-                if new_tokens:
-                    # Because the new response doesn't contain a refresh_token, we must resupply it ourselves
-                    new_tokens['refresh_token'] = session['jwt']['refresh_token']
-                    session['jwt'] = new_tokens
+            and session['jwt']['access_token'] is not None:
 
-                    # Add the time of refresh to the session cookie
-                    session['time_of_refresh'] = int(time.time())
-                    session.modified = True
+        # Doubly verifies against amazon.
+        print('CAAAAAAAAAAAAAALLLLING AmAZON 111111111111111111111111111111111111111111')
+        user_info = amazonCognito.get_user_info(session['jwt']['access_token'])
+        if user_info:
+            print(session['jwt'])
+            # The user is logged in at the moment.
+            g.user = user_info
+            if 'refresh_token' in session['jwt'] and session['jwt']['refresh_token'] is not None:
+                print('in refresh loop')
+
+                if 'time_of_refresh' not in session['jwt']:
+                    session['jwt']['time_of_refresh'] = int(time.time())
+
+                # Only refresh the token if there's less than 15 minutes left.
+                if int(time.time()) > session['jwt']['time_of_refresh'] + 2700:
+                    print('in real refresh loop')
+
+                    new_tokens = amazonCognito.refresh(
+                        session['jwt']['refresh_token'])
+                    if new_tokens:
+                        # Because the new response doesn't contain a refresh_token, we must resupply it ourselves
+                        new_tokens['refresh_token'] = session['jwt']['refresh_token']
+                        session['jwt'] = new_tokens
+
+                        # Add the time of refresh to the session cookie
+                        session['time_of_refresh'] = int(time.time())
+                        session.modified = True
+        
+        else:
+            session.clear()
 
     else:
         # Just in case there is a stale session cookie out there, we don't keep running amazonCognito.check_logged_in
@@ -263,6 +274,7 @@ def callback():
     # Get the auth token, which we proceed to store in the user session cookie.
     # The existence of a valid auth token in the session cookie determines if the user is logged in or not.
     if 'code' in request.args.keys():
+        print('IM OUT HERE CALLING AMAZOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOON!!!!')
         tokens = amazonCognito.get_auth_token(request.args['code'])
         print(tokens)
         session['jwt'] = tokens
