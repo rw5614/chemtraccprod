@@ -91,10 +91,12 @@ new Vue({
 Vue.component('answer', {
     data: function () {
         return {
+            toggleToLike: (this.liked == 'True'),
+            numLikes: parseInt(this.numberlikes),
             show: false
         }
     },
-    props: ['answertext', 'username', 'userurl'],
+    props: ['answertext', 'username', 'userurl', 'numberlikes', 'liked'],
     template: `
         <div class="card rounded-0 h-100 py-2">
             <div class="card-body">
@@ -103,27 +105,40 @@ Vue.component('answer', {
                         <!-- Answer goes here -->
                         <div class="mb-0">
                             <p>{{ answertext }}</p>
+
+                            <!-- Username goes here -->
+                            <div class="text-xs mb-1">
+                                <a :href="userurl" style="color: #808080">{{ username }}</a>
+                            </div>
                         </div>
-                        <!-- Username goes here -->
-                        <div class="text-xs mb-1">
-                            <a :href="userurl" style="color: #808080">{{ username }}</a>
-                        </div>
+                    </div>
+
+                    <!-- Number of likes goes here -->
+                    <div class="col-auto">
+                        <b>&nbsp;&nbsp;{{ numLikes }}</b> 
+                        <span v-if="!toggleToLike">
+                            <i class="fas fa-thumbs-up fa-2x text-gray-300" v-on:click="
+                                toggleToLike = !toggleToLike;
+                                numLikes++;
+                                toggleLike(1)
+                            "></i>
+                        </span>
+                        <span v-else>
+                            <i class="fas fa-thumbs-up fa-2x text-blue-300" v-on:click="
+                                toggleToLike = !toggleToLike;
+                                numLikes--;
+                                toggleLike(0)
+                            " style="color:#4e73df;"></i>
+                        </span>
+                    </div>
+
+                </div>
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
 
                         <hr>
 
-                        <div class="mb-0" style="font-size:small">
-                            Hello my guy
-                        </div>
-                        <div class="text-xs mb-1" style="text-align:right">
-                            <a :href="userurl" style="color: #808080">{{ username }}</a>
-                        </div>
-                        
-                        <div class="mb-0" style="font-size:small">
-                            Hello my guy
-                        </div>
-                        <div class="text-xs mb-1" style="text-align:right">
-                            <a :href="userurl" style="color: #808080">{{ username }}</a>
-                        </div>
+                        <slot name="comments"></slot>
 
                         <hr>
 
@@ -135,10 +150,52 @@ Vue.component('answer', {
                             </div>
                             <button type="submit" class="btn btn-success">Submit</button>
                         </form>
+
                     </div>
+                    
                 </div>
             </div>
-        </div>`
+        </div>`,
+    methods: {
+        toggleLike: function (likeValue) {
+            // If 1 then like. If 0 then remove the like. If -1 then give dislike.
+            console.log(this.questionurl);
+            console.log(likeValue);
+
+            this.$http.post('/testpost', {toggle: likeValue}).then(response => {
+
+                // successfully sent
+                console.log('true')
+                return true;
+
+            }, response => {
+                // error callback
+                console.log('false')
+                return false;
+            });
+
+            // alert(likeValue);
+        }
+    }
+})
+
+Vue.component('comment', {
+    data: function () {
+        return {
+            show: false
+        }
+    },
+    props: ['text', 'username', 'userurl'],
+    template: `
+    <div>
+        <div class="mb-0" style="font-size:small">
+            {{ text }}
+        </div>
+        <div class="text-xs mb-1" style="text-align:right">
+            <a :href="userurl" style="color: #808080">{{ username }}</a>
+        </div>
+    </div>
+`
 })
 
 new Vue({
@@ -170,8 +227,8 @@ Vue.component('addanswer', {
                             <textarea class="d-none" name="message" :value="mainMessage"></textarea>
 
                             <span v-for="tag in tags" class="badge badge-primary text-lowercase">{{ tag }}</span>
-                            <input type="text" id="tags" name="tags" class="form-control" style="margin-top: 0px; margin-bottom: 0px;" v-model:value="value" v-on:input="updatetags(value)"></input>
-                            
+                            <!-- <input type="text" id="tags" name="tags" class="form-control" style="margin-top: 0px; margin-bottom: 0px;" v-model:value="value" v-on:input="updatetags(value)"></input>
+                            -->
                             <button type="submit" class="btn btn-success">Submit</button>
                         </div>
 

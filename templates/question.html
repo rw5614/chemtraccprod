@@ -26,16 +26,22 @@
 
     <div class="row">
 
-        <div class="col-xl-12 col-md-6 mb-2">
-            <div id='question'>
-                <question answertext="Why are you running?" username="Raymond" userurl="users?id=420"></question>
-            </div>
+        <div class="col-xl-12 col-md-6 mb-2" id='question'>
+            <question questiontext="Where is the lamb sauce?" questionurl="question?id=4"
+                moreinfo="Hello, this is Gordon Ramsey, chef bloody extraordinaire. I hear you are starting a cooking show and I would like to send you my special pasta recipe to get you started..."
+                username="GordonRamsey" userurl="users?id=69" numbercomments="6" timestamp="July 4th, 1776" liked="True"
+                numberlikes="12" v-bind:tags="[&#39;food&#39;, &#39;chemistry&#39;, &#39;food chemistry&#39;]">
+            </question>
         </div>
 
         <div class="col-xl-12 col-md-6 mb-1">
             <div id='app'>
                 <!-- Add a for loop here using jinja -->
-                <answer answertext="Why are you running?" username="Raymond" userurl="users?id=420"></answer>
+                <answer answertext="Why are you running?" username="Raymond" userurl="users?id=420" numberlikes="5" liked="True">
+                    <span slot="comments">
+                        <comment text="some comment" username="steven" userurl="something"></comment>
+                    </span>
+                </answer>
             </div>
         </div>
 
