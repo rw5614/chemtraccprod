@@ -44,8 +44,8 @@
                         <answer answertext="{{ answer["answer"] }}" username="{{ answer["email"] }}"
                                 userurl="users?id={{ QAThread["userName"] }}"
                                 numberlikes="{{ answer["liked_by"]|length }}"
-                                liked="{{ g.user["userName"] in QAThread["liked_by"] }}"
-                                timestamp="{{ answer["timestamp"] }}">
+                                liked="{{ g.user["username"] in answer["liked_by"] }}"
+                                timestamp="{{ answer["timestamp"] }}" answerid="{{ answer['_id']['$oid'] }}">
                             <span slot="comments">
                             {% for comment in answer["comments"] %}
                                 <comment text="{{ comment["comment"] }}"
