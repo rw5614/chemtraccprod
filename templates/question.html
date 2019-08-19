@@ -37,9 +37,10 @@
         <div class="col-xl-12 col-md-6 mb-1">
             <div id='app'>
                 <!-- Add a for loop here using jinja -->
-                <answer answertext="Why are you running?" username="Raymond" userurl="users?id=420" numberlikes="5" liked="True">
+                <answer answertext="Why are you running?" username="Raymond" userurl="users?id=420" numberlikes="5" liked="True" timestamp="now">
                     <span slot="comments">
-                        <comment text="some comment" username="steven" userurl="something"></comment>
+                        <comment text="some comment" username="steven" userurl="something" timestamp="now"></comment>
+                        <comment text="second comment" username="joe" userurl="something" timestamp="future"></comment>
                     </span>
                 </answer>
             </div>

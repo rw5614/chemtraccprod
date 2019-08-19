@@ -96,7 +96,7 @@ Vue.component('answer', {
             show: false
         }
     },
-    props: ['answertext', 'username', 'userurl', 'numberlikes', 'liked'],
+    props: ['answertext', 'username', 'userurl', 'numberlikes', 'liked', 'timestamp'],
     template: `
         <div class="card rounded-0 h-100 py-2">
             <div class="card-body">
@@ -104,11 +104,11 @@ Vue.component('answer', {
                     <div class="col mr-2">
                         <!-- Answer goes here -->
                         <div class="mb-0">
-                            <p>{{ answertext }}</p>
+                            {{ answertext }}
 
                             <!-- Username goes here -->
                             <div class="text-xs mb-1">
-                                <a :href="userurl" style="color: #808080">{{ username }}</a>
+                                <a :href="userurl" style="color: #808080">{{ username }}</a> on {{ timestamp }}
                             </div>
                         </div>
                     </div>
@@ -185,14 +185,14 @@ Vue.component('comment', {
             show: false
         }
     },
-    props: ['text', 'username', 'userurl'],
+    props: ['text', 'username', 'userurl', 'timestamp'],
     template: `
     <div>
         <div class="mb-0" style="font-size:small">
             {{ text }}
         </div>
         <div class="text-xs mb-1" style="text-align:right">
-            <a :href="userurl" style="color: #808080">{{ username }}</a>
+            <a :href="userurl" style="color: #808080">{{ username }}</a> on {{ timestamp }}
         </div>
     </div>
 `
