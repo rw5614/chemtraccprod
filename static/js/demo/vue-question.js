@@ -104,7 +104,7 @@ Vue.component('answer', {
                     <div class="col mr-2">
                         <!-- Answer goes here -->
                         <div class="mb-0">
-                            {{ answertext }}
+                            <p v-html="answertext"></p>
 
                             <!-- Username goes here -->
                             <div class="text-xs mb-1">
