@@ -91,7 +91,9 @@ def refresh_session():
 	else:
 		# Just in case there is a stale session cookie out there, we don't keep running amazonCognito.check_logged_in
 		session.clear()
-	# session.modified = True
+
+
+# session.modified = True
 
 
 @app.route("/")
@@ -330,7 +332,7 @@ def show_question():
 
 			print(r.json())
 
-		# return '', 204
+	# return '', 204
 
 	id = request.args.get('id')
 
