@@ -208,7 +208,7 @@ def dashboard(groupID):
 			'username': question["email"],
 			'userurl': 'users?id=' + question['userName'],
 			'numcomments': len(question['answers']) if 'answers' in question else 0,
-			'timestamp': time.ctime(question['timestamp']),
+			'timestamp': question['timestamp'],
 			'liked': liked,
 			'numberlikes': len(question['liked_by']) if 'liked_by' in question else 0,
 			'tags': question['tags']
@@ -345,7 +345,7 @@ def show_question():
 
 	QAThread = r.json()
 	print(QAThread)
-	QAThread["timestamp"] = time.ctime(QAThread["timestamp"])
+
 	print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
 
 	if "liked_by" not in QAThread:

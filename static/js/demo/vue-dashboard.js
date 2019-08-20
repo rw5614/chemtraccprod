@@ -1,6 +1,10 @@
 Vue.component('question', {
     data: function () {
+        localtimestampepoch = parseFloat(this.timestamp)
+        localtimeDate = new Date(localtimestampepoch * 1000)
+
         return {
+            localtime: localtimeDate.toString(),
             toggleToLike: (this.liked == 'True'),
             toggleSuccess: false,
             numLikes: parseInt(this.numberlikes)
@@ -23,7 +27,7 @@ Vue.component('question', {
                     </div>
                     <!-- Username goes here -->
                     <div class="text-xs mb-1">
-                        <a :href="'/' + userurl" style="color: #808080">{{ username }}</a> on {{ timestamp }}
+                        <a :href="'/' + userurl" style="color: #808080">{{ username }}</a> on {{ localtime }}
                     </div>
                     <!-- Details go here -->
                     <div class="mb-1">
