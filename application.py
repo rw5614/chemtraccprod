@@ -295,33 +295,44 @@ def callback():
 @app.route("/question", methods=['GET', 'POST'])
 @login_required
 def show_question():
-    if request.method == "POST":
-        print('Saw post')
-        id = request.args.get('id')
+	if request.method == "POST":
+		id = request.args.get('id')
 
-        message = request.form['message']
+		userName = g.user['username']
 
-        userName = g.user['username']
+		if 'answerid' in request.form:
+			# now we know this is a comment for an answer
+			comment_api_url = base_api_url + "/qa/comment"
 
-        post_answer_url = base_api_url + 'qa/answer'
+			comment_json = {"userName": userName,
+							"parentID": request.form['answerid'],
+							"comment": request.form["comment"]}
+			print(comment_json)
+			r = requests.post(comment_api_url, json=comment_json)
 
-        print('hi!')
+		else:
+			# Otherwise we're posting an answer
+			message = request.form['message']
 
-        r = requests.post(post_answer_url, json={
-            'userName': userName,
-            'questionID': id,
-            'answer': message
-        })
+			post_answer_url = base_api_url + 'qa/answer'
 
-        print('OKAOKAOKOKOKOKOKOKOKO')
+			print('hi!')
 
-        print(r)
+			r = requests.post(post_answer_url, json={
+				'userName': userName,
+				'questionID': id,
+				'answer': message
+			})
 
-        print(r.json())
+			print('OKAOKAOKOKOKOKOKOKOKO')
 
-        # return '', 204
+			print(r)
 
-    id = request.args.get('id')
+			print(r.json())
+
+		# return '', 204
+
+	id = request.args.get('id')
 
 	# get the question answer thread from the id and username
 
