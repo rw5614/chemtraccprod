@@ -295,6 +295,32 @@ def callback():
 @app.route("/question", methods=['GET', 'POST'])
 @login_required
 def show_question():
+    if request.method == "POST":
+        print('Saw post')
+        id = request.args.get('id')
+
+        message = request.form['message']
+
+        userName = g.user['username']
+
+        post_answer_url = base_api_url + 'qa/answer'
+
+        print('hi!')
+
+        r = requests.post(post_answer_url, json={
+            'userName': userName,
+            'questionID': id,
+            'answer': message
+        })
+
+        print('OKAOKAOKOKOKOKOKOKOKO')
+
+        print(r)
+
+        print(r.json())
+
+        # return '', 204
+
     id = request.args.get('id')
 
     # get the question answer thread from the id and username

@@ -226,8 +226,7 @@ Vue.component('addanswer', {
                             <textarea class="d-none" name="message" :value="mainMessage"></textarea>
 
                             <span v-for="tag in tags" class="badge badge-primary text-lowercase">{{ tag }}</span>
-                            <!-- <input type="text" id="tags" name="tags" class="form-control" style="margin-top: 0px; margin-bottom: 0px;" v-model:value="value" v-on:input="updatetags(value)"></input>
-                            -->
+                            <input type="hidden" id="tags" name="tags" class="form-control" style="margin-top: 0px; margin-bottom: 0px;" v-model:value="value" v-on:input="updatetags(value)"></input>
                             <button type="submit" class="btn btn-success">Submit</button>
                         </div>
 
