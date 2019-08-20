@@ -18,7 +18,8 @@
                 </span>
             </div>
         </form>
-        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+
+        <a href="{{ url_for('ask', groupID=groupID) }}" id="input" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
                 class="fas fa-question fa-sm text-white-50"></i> Ask a Question</a>
 
         <h1 class="h3 mb-0 text-gray-800">The Knowledge Exchange</h1>
@@ -26,88 +27,28 @@
 
 
     <div class="row">
+        <div id="app" class="col-xl-12 col-md-6">
 
-        <div class="col-xl-12 col-md-6 mb-2">
-            <div class="card border-left-primary shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <!-- Question goes here -->
-                            <div class="mb-1">
-                                <h5><a href="google.com">I keep setting fire to my lab bench! Help!!</a></h5>
-                            </div>
-                            <!-- Username goes here -->
-                            <div class="text-xs mb-1">
-                                <a href="google.com" style="color: #808080">Steve-O</a>
-                            </div>
-                            <!-- Details go here -->
-                            <div class="mb-1">
-                                <p>I really want to do this thing. Help me, please! Here are more details.</p>
-                            </div>
-                        </div>
-                        <!-- Number of comments goes here -->
-                        <div class="col-auto">
-                            <b>1</b> <i class="fas fa-comments fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            {% for question in questions %}
+
+            <question questiontext="{{ question.questiontext }}" questionurl="{{ question.questionurl }}"
+                moreinfo="{{ question.moreinfo }}" username="{{ question.username }}" userurl="{{ question.userurl }}"
+                numbercomments="{{ question.numcomments }}" timestamp="{{ question.timestamp }}"
+                liked="{{ question.liked }}" numberlikes="{{ question.numberlikes }}" v-bind:tags="{{ question.tags }}">
+            </question>
+
+            {% endfor %}
+
         </div>
-
-        <div class="col-xl-12 col-md-6 mb-2">
-            <div class="card border-left-primary shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <!-- Question goes here -->
-                            <div class="mb-1">
-                                <h5><a href="google.com">I keep setting fire to my lab bench! Help!!</a></h5>
-                            </div>
-                            <!-- Username goes here -->
-                            <div class="text-xs mb-1">
-                                <a href="google.com" style="color: #808080">Steve-O</a>
-                            </div>
-                            <!-- Details go here -->
-                            <div class="mb-1">
-                                <p>I really want to do this thing. Help me, please! Here are more details.</p>
-                            </div>
-                        </div>
-                        <!-- Number of comments goes here -->
-                        <div class="col-auto">
-                            <b>1</b> <i class="fas fa-comments fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
     </div>
 
     <div class="row">
 
-        <div class="col-xl-12">
-            <div class="card-transparent mb-4">
+        <div id="pageselectapp" class="col-xl-12">
 
-                <nav aria-label="Page navigation example">
-                    <ul class="pagination justify-content-center">
-                        <li class="page-item">
-                            <a class="page-link" href="#">Previous</a>
-                        </li>
-                        <li class="page-item disabled">
-                            <a class="page-link" href="#" tabindex="-1">Previous</a>
-                        </li>
-                        <li class="page-item disabled"><a class="page-link" href="#">...</a></li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item disabled"><a class="page-link" href="#">...</a></li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">Next</a>
-                        </li>
-                    </ul>
-                </nav>
-
-            </div>
+            <pageselector currentpage="{{ paginator.currentpage }}" maxpage="{{ paginator.maxpage }}"
+                query="{{ paginator.query }}" baseurl="{{ url_for('dashboard', groupID=groupID) }}"></pageselector>
+        
         </div>
     </div>
 
@@ -122,6 +63,49 @@
 <!-- Page level plugins -->
 
 <!-- Page level custom scripts -->
+<script src="{{ url_for('static', filename='js/demo/vue-dashboard.js')}}"></script>
+
+<script>
+    $(function () {
+        $("#search_query")
+            .popover({ content: "Try this query: where is the lamb sauce tags=cooking", placement: "top" })
+            .blur(function () {
+                $(this).popover('hide');
+            });
+    });
+</script>
+
+<script>
+    var IMAGE_MIME_REGEX = /^image\/(p?jpeg|gif|png)$/i;
+
+    var loadImage = function (file) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            var img = document.createElement('img');
+            img.src = e.target.result;
+
+            var range = window.getSelection().getRangeAt(0);
+            range.deleteContents();
+            range.insertNode(img);
+        };
+        reader.readAsDataURL(file);
+    };
+
+    document.onpaste = function (e) {
+        if (Boolean(window.chrome)) {
+            var items = e.clipboardData.items;
+
+            for (var i = 0; i < items.length; i++) {
+                if (IMAGE_MIME_REGEX.test(items[i].type)) {
+                    loadImage(items[i].getAsFile());
+                    return;
+                }
+            }
+        };
+
+        // Normal paste handling here
+    }
+</script>
 
 
 {% endblock %}

@@ -4,122 +4,120 @@
 
 {% block body %}
 
-<div class="container-fluid">
+    <div class="container-fluid">
 
-    <!-- Page Heading -->
-    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <form>
-            <div class="input-group">
-                <input id="search_query" class="form-control" placeholder="Search" type="text" name="q">
-                <span class="input-group-btn">
+        <!-- Page Heading -->
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <form>
+                <div class="input-group">
+                    <input id="search_query" class="form-control" placeholder="Search" type="text" name="q">
+                    <span class="input-group-btn">
                     <button class="btn btn-default" type="submit">
                         <i class="fa fa-search"></i>
                     </button>
                 </span>
+                </div>
+            </form>
+            <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                    class="fas fa-question fa-sm text-white-50"></i> Ask a Question</a>
+
+            <h1 class="h3 mb-0 text-gray-800">The Knowledge Exchange</h1>
+        </div>
+
+        <div class="row">
+
+            <div class="col-xl-12 col-md-6 mb-2" id='question'>
+                <question questiontext="{{ QAThread['question'] }}"
+                          questionurl="question?id={{ QAThread['_id']['$oid'] }}"
+                          moreinfo="{{ QAThread['body'] }}"
+                          username="{{ QAThread['email'] }}" userurl="users?id={{ QAThread['userName'] }}"
+                          numbercomments="{{ QAThread['comments']|length }}" timestamp="{{ QAThread['timestamp'] }}"
+                          liked="{{ g.user["username"] in QAThread["liked_by"] }}"
+                          numberlikes="{{ QAThread["liked_by"]|length }}"
+                          v-bind:tags="{{ QAThread["tags"] }}">
+                </question>
             </div>
-        </form>
-        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                class="fas fa-question fa-sm text-white-50"></i> Ask a Question</a>
 
-        <h1 class="h3 mb-0 text-gray-800">The Knowledge Exchange</h1>
-    </div>
+            <div class="col-xl-12 col-md-6 mb-1">
+                <div id='app'>
+                    {% for answer in QAThread["answers"] %}
+                        <answer answertext="{{ answer["answer"] }}" username="{{ answer["email"] }}"
+                                userurl="users?id={{ QAThread["userName"] }}"
+                                numberlikes="{{ answer["liked_by"]|length }}"
+                                liked="{{ g.user["username"] in answer["liked_by"] }}"
+                                timestamp="{{ answer["timestamp"] }}" answerid="{{ answer['_id']['$oid'] }}">
+                            <span slot="comments">
+                            {% for comment in answer["comments"] %}
+                                <comment text="{{ comment["comment"] }}"
+                                        {% if "email" in comment %}
+                                         username="{{ comment["email"] }}"
+                                        {% else %}
+                                         username="somebody"
+                                        {% endif %}
+                                         userurl="users?id={{ comment["userName"] }}"
+                                         timestamp="{{ comment["timestamp"] }}"></comment>
+                            {% endfor %}
+                            </span>
+                        </answer>
+                    {% endfor %}
+                </div>
+            </div>
 
-    <div class="row">
+        </div>
 
-        <div class="col-xl-12 col-md-6 mb-2">
-            <div class="card border-left-primary shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <!-- Question goes here -->
-                            <div class="mb-1">
-                                <h5><a href="google.com">I keep setting fire to my lab bench! Help!!</a></h5>
-                            </div>
-                            <!-- Username goes here -->
-                            <div class="text-xs mb-1">
-                                <a href="google.com" style="color: #808080">Steve-O</a>
-                            </div>
-                            <!-- Details go here -->
-                            <div class="mb-1">
-                                <p>I really want to do this thing. Help me, please! Here are more details.</p>
-                            </div>
-                        </div>
-                    </div>
+        <!-- <div id="app">
+            <comment></comment>
+        </div> -->
+
+        <div class="row">
+            <div class="col-xl-12 col-md-6 mb-1">
+                <div id="addanswer">
+                    <addanswer showheader="False" value="someValue"></addanswer>
                 </div>
             </div>
         </div>
 
-        <div class="col-xl-12 col-md-6 mb-1">
-            <div id='app'>
-                <answer answertext="Why are you running?" username="Raymond" userurl="users?id=420"></answer>
-            </div>
-        </div>
-
-        <div class="col-xl-1"></div>
-        <div class="col-xl-11 col-md-6 mb-1">
-            <div class="card rounded-0 h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <!-- Answer goes here -->
-                            <div class="mb-0">
-                                <p>I really want to do this thing. Help me, please! Here are more details.</p>
-                            </div>
-                            <!-- Username goes here -->
-                            <div class="text-xs mb-1">
-                                <a href="google.com" style="color: #808080">Steve-O</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
     </div>
 
-    <!-- <div id="app">
-        <comment></comment>
-    </div> -->
 
-    <div class="row">
-
-        <div class="col-xl-12">
-            <div class="card-transparent mb-4">
-
-                <nav aria-label="Page navigation example">
-                    <ul class="pagination justify-content-center">
-                        <li class="page-item">
-                            <a class="page-link" href="#">Previous</a>
-                        </li>
-                        <li class="page-item disabled">
-                            <a class="page-link" href="#" tabindex="-1">Previous</a>
-                        </li>
-                        <li class="page-item disabled"><a class="page-link" href="#">...</a></li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item disabled"><a class="page-link" href="#">...</a></li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">Next</a>
-                        </li>
-                    </ul>
-                </nav>
-
-            </div>
-        </div>
-    </div>
-
-</div>
-
-
-<!-- /.container-fluid -->
+    <!-- /.container-fluid -->
 {% endblock %}
 
 
 {% block scripts %}
-<!-- Page level plugins -->
+    <!-- Page level plugins -->
 
-<!-- Page level custom scripts -->
-<script src="static/js/demo/vue-apps.js"></script>
+    <!-- Page level custom scripts -->
+    <script src="static/js/demo/vue-question.js"></script>
+    <script>
+        var IMAGE_MIME_REGEX = /^image\/(p?jpeg|gif|png)$/i;
+
+        var loadImage = function (file) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                var img = document.createElement('img');
+                img.src = e.target.result;
+
+                var range = window.getSelection().getRangeAt(0);
+                range.deleteContents();
+                range.insertNode(img);
+            };
+            reader.readAsDataURL(file);
+        };
+
+        document.onpaste = function (e) {
+            if (Boolean(window.chrome)) {
+                var items = e.clipboardData.items;
+
+                for (var i = 0; i < items.length; i++) {
+                    if (IMAGE_MIME_REGEX.test(items[i].type)) {
+                        loadImage(items[i].getAsFile());
+                        return;
+                    }
+                }
+            }
+            // Normal paste handling here
+        }
+    </script>
 
 {% endblock %}

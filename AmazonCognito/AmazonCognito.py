@@ -12,6 +12,7 @@ class AmazonCognito:
         self.redirect_url = redirect_uri
 
     def check_logged_in(self, access_token):
+        # Deprecated: use get_user_info to and see if it returns not None.
         headers = {
             "Authorization": "Bearer " + access_token
         }
@@ -28,7 +29,13 @@ class AmazonCognito:
             "Authorization": "Bearer " + access_token
         }
         r = requests.get(self.url + "/oauth2/userInfo", headers=headers)
-        return r.json()
+        if r.status_code == 401:
+            return None
+        elif r.status_code == 200:
+            return r.json()
+        else:
+            print("BAD REQUEST")
+            return None
 
     def client_id_and_secret_to_HTTP_auth(self):
         return base64.b64encode(bytes(self.client_id + ':' + self.client_secret, 'utf-8')).decode('utf-8')
