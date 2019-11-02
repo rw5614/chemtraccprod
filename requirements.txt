@@ -7,7 +7,7 @@ chardet==3.0.4
 Click==7.0
 cryptography==2.7
 docutils==0.14
-ecdsa==0.13.2
+ecdsa==0.13.3
 Flask==1.0.3
 Flask-Login==0.4.1
 flask-oidc==1.4.0
